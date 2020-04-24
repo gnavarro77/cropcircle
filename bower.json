@@ -1,0 +1,10 @@
+{
+  "name": "itr",
+  "version": "1.0.0",
+  "description": "",
+  "main": "crop/crop.js",
+  "dependencies": {
+    "mathjs": "^6.6.4",
+    "snapsvg": "^0.5.1"
+  }
+}

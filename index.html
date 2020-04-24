@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title></title>
+	
+	<style>
+	#svg {
+		width: 800px;
+		height: 800px;
+		border : solid 1px rgb(0, 64, 128);
+	}
+	</style>
+	
+	<script type="text/javascript">
+	const width = 800;
+	const height = 800;
+	
+	const center = {x: width/2, y: height/2};
+	
+	window.onload = function() {
+		Snap:s = Snap("#svg");
+		s.width = width;
+		s.height = height;
+		draw();
+		
+	}
+	</script>
+	
+	
+</head>
+
+    <body>
+	<svg id="svg" ></svg>
+        
+
+	<!-- bower:js -->
+	<script src="node_modules/complex.js/complex.js"></script>
+	<script src="node_modules/escape-latex/dist/index.js"></script>
+	<script src="node_modules/javascript-natural-sort/naturalSort.js"></script>
+	<script src="node_modules/seed-random/index.js"></script>
+	<script src="node_modules/tiny-emitter/index.js"></script>
+	<script src="node_modules/snapsvg/dist/snap.svg-min.js"></script>
+	<!-- endbower -->
+    <!-- inject:js -->
+	<script src="crop/crop.js"></script>
+	<!-- endinject -->
+</body>
+</html>
