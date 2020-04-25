@@ -7,7 +7,7 @@ var wiredep = require('wiredep').stream;
 gulp.task('index', function () {
   var target = gulp.src('./index.html');
  
-  var sources = gulp.src(['./crop/**/*.js'], {read: false});
+  var sources = gulp.src(['./crop/**/*.js','./UIController.js','./*.css'], {read: false});
  
   return target.pipe(wiredep({
 		directory:'node_modules', 

@@ -8,16 +8,20 @@
     <title></title>
 	
 	<style>
-	#svg {
-		width: 800px;
-		height: 800px;
-		border : solid 1px rgb(0, 64, 128);
-	}
+	
 	</style>
 	
+	<!-- bower:css -->
+	<link rel="stylesheet" href="node_modules/normalize.css/normalize.css" />
+	<link rel="stylesheet" href="node_modules/milligram/dist/milligram.css" />
+	<!-- endbower -->
+	<!-- inject:css -->
+	<link rel="stylesheet" href="style.css">
+	<!-- endinject -->
+	
 	<script type="text/javascript">
-	const width = 800;
-	const height = 800;
+	const width = 500;
+	const height = 500;
 	
 	const center = {x: width/2, y: height/2};
 	
@@ -25,7 +29,7 @@
 		Snap:s = Snap("#svg");
 		s.width = width;
 		s.height = height;
-		draw();
+		new WestDown().draw();
 		
 	}
 	</script>
@@ -33,20 +37,41 @@
 	
 </head>
 
-    <body>
-	<svg id="svg" ></svg>
+    <body >
+<div class="container">
+	<div class="row">
+    	<div class="column column-70"><svg id="svg" ></svg></div>
+    	<div class="column ">
+
+<form id="app">
+  <fieldset>
+    <div >
+      <input type="checkbox" id="displayTraceRegulateur" 
+			v-model="displayTraceRegulateur"
+			v-on:change="displayTraceRegulateurValueChangeHandler">
+      <label class="label-inline" for="displayTraceRegulateur">Afficher le tracé régulateur</label>
+    </div>
+
+{{ message }}
+
+  </fieldset>
+</form>
+
+		</div>
+  	</div>
+
+</div>
+	
         
 
 	<!-- bower:js -->
-	<script src="node_modules/complex.js/complex.js"></script>
-	<script src="node_modules/escape-latex/dist/index.js"></script>
-	<script src="node_modules/javascript-natural-sort/naturalSort.js"></script>
-	<script src="node_modules/seed-random/index.js"></script>
-	<script src="node_modules/tiny-emitter/index.js"></script>
 	<script src="node_modules/snapsvg/dist/snap.svg-min.js"></script>
+	<script src="node_modules/vue/dist/vue.min.js"></script>
 	<!-- endbower -->
     <!-- inject:js -->
-	<script src="crop/crop.js"></script>
+	<script src="crop/0utils.js"></script>
+	<script src="crop/westDown.js"></script>
+	<script src="UIController.js"></script>
 	<!-- endinject -->
 </body>
 </html>

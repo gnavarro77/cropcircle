@@ -1,0 +1,35 @@
+#svg {
+		width: 500px;
+		height: 500px;
+		border : solid 1px rgb(0, 64, 128);
+	}
+
+
+.traceRegulateur {
+	fill: transparent;
+	stroke: antiquewhite;
+	stroke-opacity: .9;
+	stroke-width: 1
+}
+
+.trace {
+	fill: transparent;
+	stroke: cadetblue;
+	stroke-width: 2px;
+}
+
+.plain {
+	fill:coral;
+	
+}
+
+.pin {
+	fill:blanchedalmond;
+	stroke: blanchedalmond;
+	stroke-width: 1px;
+}
+
+.hidden {
+	opacity: 0;
+	visibility: hidden;
+}
