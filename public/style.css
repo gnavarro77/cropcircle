@@ -7,7 +7,7 @@
 
 .traceRegulateur {
 	fill: transparent;
-	stroke: antiquewhite;
+	stroke: coral;
 	stroke-opacity: .9;
 	stroke-width: 1
 }
@@ -19,14 +19,37 @@
 }
 
 .plain {
-	fill:coral;
+	fill:transparent;
 	
 }
 
-.pin {
-	fill:blanchedalmond;
-	stroke: blanchedalmond;
+.ying {
+	fill: transparent;
+	stroke: cadetblue;
 	stroke-width: 1px;
+}
+
+.yang {
+	fill: coral;
+	stroke: coral;
+	stroke-width: 1px;
+}
+
+.pin {
+	fill:navy;
+	stroke: navy;
+	stroke-width: 1px;
+}
+
+.tooltip {
+	stroke:darkcyan;
+	stroke-width: 1px;
+}
+
+.liveexample {
+	fill: transparent;
+	stroke: cadetblue;
+	stroke-width: 2px;
 }
 
 .hidden {

@@ -1,16 +1,17 @@
 
 function WestDown() {
 
-	this.draw = function() {
+	this.draw = function (svg, center) {
 		console.debug('drawing West Down crop circle...');
 
 		var radius = [32, 60, 175, 180];
 		var circles = [];
 
 
-		s.circle(center.x, center.y, radius[3]).addClass('trace plain');
+		svg.circle(center.x, center.y, radius[3]).addClass('ying');
+		svg.circle(center.x, center.y, 36).addClass('ying');
 
-		drawCerclesRegulateursCentres(center, radius);
+		drawCerclesRegulateursCentres(svg, center, radius);
 
 
 		function computePoints(radius) {
@@ -21,7 +22,6 @@ function WestDown() {
 					x: center.x + (Snap.cos(ang) * radius),
 					y: center.y - (Snap.sin(ang) * radius)
 				};
-				//pin(p);
 				points.push(p);
 			}
 			return points;
@@ -30,29 +30,24 @@ function WestDown() {
 		// trace regulateur
 		var c = null;
 		var regA = { ext: [], int: [] };
-		computePoints(radius[1]).forEach(function(pt, i) {
-			c = s.circlePath(pt.x, pt.y, 120).addClass('traceRegulateur');
-
-			regA.ext.push(
-				{ radius: 120, center: pt, obj: c }
-			);
-
-			c = s.circlePath(pt.x, pt.y, 120 - 5).addClass('traceRegulateur');
-			regA.int.push(
-				{ radius: 120 - 5, center: pt, obj: c }
-			);
+		computePoints(radius[1]).forEach(function (pt, i) {
+			[120, 120 - 5].forEach(function (r, i) {
+				c = svg.circlePath(pt.x, pt.y, r).addClass('traceRegulateur');
+				var prop = (i == 0) ? 'ext' : 'int';
+				regA[prop].push(
+					{ radius: r, center: pt, obj: c }
+				);
+			});
 		});
 
 
 		var regB = { ext: [], int: [] };
-		computePoints(radius[0]).forEach(function(pt, i) {
+		computePoints(radius[0]).forEach(function (pt, i) {
 			var r = radius[0] + radius[1];
-			c = s.circlePath(pt.x, pt.y, r).addClass('traceRegulateur');
+			c = svg.circlePath(pt.x, pt.y, r).addClass('traceRegulateur');
 			regB.ext.push({ radius: r, center: pt, obj: c });
-
-			c = s.circlePath(pt.x, pt.y, r - 5).addClass('traceRegulateur');
+			c = svg.circlePath(pt.x, pt.y, r - 5).addClass('traceRegulateur');
 			regB.int.push({ radius: r - 5, center: pt, obj: c });
-
 		});
 
 		function _mandalize(pattern) {
@@ -61,21 +56,23 @@ function WestDown() {
 		}
 
 
+
 		var intersectionsA = Snap.path.intersection(regA.ext[2].obj, regA.int[0].obj);
 		var intersectionsB = Snap.path.intersection(regA.ext[2].obj, regB.ext[0].obj);
 		pt1 = intersectionsA[1];
 		pt2 = intersectionsB[0];
-		var arc1 = arcCircle(regA.ext[2].center, regA.ext[2].radius, pt1, pt2);
+		var arc1 = arcCircle(svg, regA.ext[2].center, regA.ext[2].radius, pt1, pt2);
 
 		intersectionsB = Snap.path.intersection(regA.int[0].obj, regB.ext[2].obj);
 		//_debug(intersectionsB[0]);
 		pt3 = intersectionsB[0];
-		var arc2 = arcCircle(regA.int[0].center, regA.int[0].radius, pt1, pt3);
-		var arc3 = arcCircle(regB.ext[0].center, regB.ext[0].radius, pt2, pt3);
-		var petale = s.group(arc1, arc2, arc3);
+		var arc2 = arcCircle(svg, regA.int[0].center, regA.int[0].radius, pt1, pt3);
+		var arc3 = arcCircle(svg, regB.ext[0].center, regB.ext[0].radius, pt2, pt3);
+		var petale = svg.group(arc1, arc2, arc3);
 		_mandalize(petale);
-		//	var petale2 = petale.clone().transform('r120,' + center.x+ ',' + center.y);
-		//	var petale3 = petale.clone().transform('r240,' + center.x + ',' + center.y);
+
+		var intersectionPoints = [pt1, pt2, pt3];
+
 
 
 		intersectionsA = Snap.path.intersection(regB.int[0].obj, regA.int[1].obj);
@@ -84,19 +81,22 @@ function WestDown() {
 		intersectionsA = Snap.path.intersection(regB.int[0].obj, regB.ext[1].obj);
 		//	_debug(intersectionsA[1]);
 		var pt2 = intersectionsA[1];
-		arc1 = arcCircle(regB.int[0].center, regB.int[0].radius, pt1, pt2);
+		arc1 = arcCircle(svg, regB.int[0].center, regB.int[0].radius, pt1, pt2);
 
 		intersectionsA = Snap.path.intersection(regA.int[1].obj, regA.int[2].obj);
 		var pt3 = intersectionsA[1];
 
-		arc2 = arcCircle(regB.ext[1].center, regB.ext[1].radius, pt3, pt2);
-		arc3 = arcCircle(regA.int[1].center, regA.int[1].radius, pt3, pt1);
+		arc2 = arcCircle(svg, regB.ext[1].center, regB.ext[1].radius, pt3, pt2);
+		arc3 = arcCircle(svg, regA.int[1].center, regA.int[1].radius, pt3, pt1);
 
-		petale = s.group(arc1, arc2, arc3);
+		petale = svg.group(arc1, arc2, arc3);
 		_mandalize(petale);
 		//	var petale2 = petale.clone().transform('r120,' + center.x + ',' + center.y);
 		//	var petale3 = petale.clone().transform('r240,' + center.x + ',' + center.y);
 
+		intersectionPoints.push(pt1);
+		intersectionPoints.push(pt2);
+		intersectionPoints.push(pt3);
 
 
 		intersectionsA = Snap.path.intersection(regA.int[1].obj, regA.int[2].obj);
@@ -109,15 +109,23 @@ function WestDown() {
 		//_debug(intersectionsA[0]);
 		pt3 = intersectionsA[0];
 
-		arc1 = arcCircle(regA.int[1].center, regA.int[1].radius, pt2, pt1);
-		arc2 = arcCircle(regA.int[0].center, regA.int[0].radius, pt3, pt2);
-		arc3 = arcCircle(regA.int[2].center, regA.int[2].radius, pt1, pt3);
+		arc1 = arcCircle(svg, regA.int[1].center, regA.int[1].radius, pt2, pt1);
+		arc2 = arcCircle(svg, regA.int[0].center, regA.int[0].radius, pt3, pt2);
+		arc3 = arcCircle(svg, regA.int[2].center, regA.int[2].radius, pt1, pt3);
 
-		s.group(arc1, arc2, arc3);
+		svg.group(arc1, arc2, arc3);
 
-		s.circle(center.x, center.y, 36).addClass('trace');
+		intersectionPoints.push(pt1);
+		intersectionPoints.push(pt2);
+		intersectionPoints.push(pt3);
+
+		// [regA, regB].forEach(function (reg) {
+		// 	reg['ext'].forEach(function (obj) {
+		// 		pin(svg, obj.center);
+		// 	});
+		// });
+
+		// intersectionPoints.forEach(function (pt) { pin(svg, pt); });
 
 	}
-
-	//	return this;
 };

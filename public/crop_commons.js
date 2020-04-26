@@ -1,5 +1,5 @@
-Snap.plugin(function(Snap, Element, Paper, global) {
-	Paper.prototype.circlePath = function(cx, cy, r) {
+Snap.plugin(function (Snap, Element, Paper, global) {
+	Paper.prototype.circlePath = function (cx, cy, r) {
 		var p = "M" + cx + "," + cy;
 		p += "m" + -r + ",0";
 		p += "a" + r + "," + r + " 0 1,0 " + (r * 2) + ",0";
@@ -17,8 +17,21 @@ function polarToCartesian(centerX, centerY, radius, angle) {
 
 
 
-function pin(pt) {
-	s.circle(pt.x, pt.y, 3).addClass('pin');
+function pin(svg, pt) {
+	var c = svg.circle(pt.x, pt.y, 3).addClass('pin');
+	var lbl = pt.x.toFixed(2) + "; " + pt.y.toFixed(2);
+
+	var textBox;
+	function hover(event) {
+		var bbox = event.target.getBBox();
+		textBox = svg.text(bbox.x, bbox.y, lbl).addClass('tooltip');
+	}
+
+	function hout() {
+		textBox.remove();
+	}
+
+	c.hover(hover, hout);
 }
 
 
@@ -38,7 +51,7 @@ function describeArc(x, y, radius, startAngle, endAngle) {
 
 /**
  */
-function _cercleRegulateur(center, radius) {
+function _cercleRegulateur(s, center, radius) {
 	return s.circle(center.x, center.y, radius)
 		.addClass('traceRegulateur');
 	//		.animate({ r: radius }, 3000, mina.easeinout);
@@ -46,15 +59,15 @@ function _cercleRegulateur(center, radius) {
 
 /**
  */
-function drawCerclesRegulateursCentres(_center, radius) {
+function drawCerclesRegulateursCentres(s, _center, radius) {
 	for (var i = 0; i < radius.length; i++) {
-		_cercleRegulateur(_center, radius[i]);
+		_cercleRegulateur(s, _center, radius[i]);
 	}
 }
 
 /**
 	 */
-function arcCircle(center, radius, pt1, pt2) {
+function arcCircle(svg, center, radius, pt1, pt2) {
 	var startAngle = Snap.angle(
 		center.x + radius,
 		center.y,
@@ -74,7 +87,25 @@ function arcCircle(center, radius, pt1, pt2) {
 
 	);
 	var strPath = describeArc(center.x, center.y, radius, Math.abs(endAngle), Math.abs(startAngle));
-	return s.path(strPath, center.x, center.y).addClass('trace');
+	var path = svg.path(strPath, center.x, center.y).addClass('trace');
+
+
+	var lbl = path.node.attributes.d.nodeValue;
+
+	var textBox;
+	function hover(event) {
+		var bbox = event.target.getBBox();
+		textBox = svg.text(bbox.x, bbox.y, lbl).addClass('tooltip');
+	}
+
+	function hout() { textBox.remove(); }
+
+	path.hover(hover, hout);
+	path.click(function(){
+		navigator.clipboard.writeText(lbl);
+	});
+	console.log(lbl);
+	return path;
 }
 
 
@@ -82,7 +113,7 @@ function arcCircle(center, radius, pt1, pt2) {
  */
 function _debug(obj) {
 	if (Array.isArray(obj)) {
-		obj.forEach(function(el) {
+		obj.forEach(function (el) {
 			pin({ x: el.x, y: el.y });
 		});
 	} else {
