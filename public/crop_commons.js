@@ -34,6 +34,14 @@ function pin(svg, pt) {
 	c.hover(hover, hout);
 }
 
+function drawDiameter(svg, center, radius, angle) {
+	var x1 = center.x + (radius * Snap.cos(angle));
+	var y1 = center.y + (radius * Snap.sin(angle));
+	var x2 = center.x - (radius * Snap.cos(angle));
+	var y2 = center.y - (radius * Snap.sin(angle));
+	return svg.line(x1, y1, x2, y2).addClass('traceRegulateur');
+}
+
 
 /**
  */
@@ -101,13 +109,21 @@ function arcCircle(svg, center, radius, pt1, pt2) {
 	function hout() { textBox.remove(); }
 
 	path.hover(hover, hout);
-	path.click(function(){
+	path.click(function () {
 		navigator.clipboard.writeText(lbl);
 	});
 	console.log(lbl);
 	return path;
 }
 
+/**
+ *
+ */
+function _resolveCenter(svg) {
+	var w = svg.paper.node.width.baseVal.value;
+	var h = svg.paper.node.height.baseVal.value;
+	return { x: w / 2, y: h / 2 };
+}
 
 /**
  */

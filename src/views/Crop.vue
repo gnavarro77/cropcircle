@@ -33,15 +33,11 @@
 </template>
 
 <script>
-const cropDefs = [{ id: "westdown", label: "West Down" }];
-/**
- *
- */
-function _resolveFilter(svg) {
-  var w = svg.paper.node.width.baseVal.value;
-  var h = svg.paper.node.height.baseVal.value;
-  return { x: w / 2, y: h / 2 };
-}
+const cropDefs = [
+  { id: "westdown", label: "West Down", myClass: "WestDown" },
+  { id: "boreham", label: "Boreham", myClass: "Boreham" }
+];
+
 
 export default {
   name: "Crop",
@@ -55,25 +51,34 @@ export default {
   },
   methods: {
     onCropSelected: function(event) {
-      console.log("crop selected... " + this.crop);
-      Vue.loadScript("/" + this.crop + ".js").then(() => {
+      var cropId = this.crop;
+      Vue.loadScript("/" + cropId + ".js").then(() => {
         var svg = Snap("#svg");
-        var center = _resolveFilter(svg);
-        new WestDown().draw(svg, center);
+        var center = _resolveCenter(svg);
+        var obj = cropDefs.find(function(obj) {
+          if (obj.id == cropId) {
+            return obj;
+          }
+        });
+        svg.clear();
+        var instance = window[obj.myClass];
+        new instance().draw(svg, center);
       });
     },
     onDisplayTraceRegulateurValueChanged: function(event) {
       var display = this.displayTraceRegulateur;
-      Snap("#svg").selectAll(".traceRegulateur").forEach(function(el) {
-        display ? el.removeClass("hidden") : el.addClass("hidden");
-      });
+      Snap("#svg")
+        .selectAll(".traceRegulateur")
+        .forEach(function(el) {
+          display ? el.removeClass("hidden") : el.addClass("hidden");
+        });
     }
   },
   mounted() {
     var self = this;
     Vue.loadScript("/crop_commons.js").then(() => {
       // tmp
-      self.crop = "westdown";
+      self.crop = "boreham";
       self.onCropSelected();
     });
   }
