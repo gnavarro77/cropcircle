@@ -25,6 +25,9 @@
               />
               <label class="label-inline" for="displayTraceRegulateur">Afficher le tracé régulateur</label>
             </div>
+            <div>
+              <button v-on:click="doExport">Exporter</button>
+            </div>
           </fieldset>
         </form>
       </div>
@@ -35,9 +38,9 @@
 <script>
 const cropDefs = [
   { id: "westdown", label: "West Down", myClass: "WestDown" },
-  { id: "boreham", label: "Boreham", myClass: "Boreham" }
+  { id: "boreham", label: "Boreham", myClass: "Boreham" },
+  { id: "boxley", label: "Boxley", myClass: "Boxley" }
 ];
-
 
 export default {
   name: "Crop",
@@ -51,18 +54,19 @@ export default {
   },
   methods: {
     onCropSelected: function(event) {
+      var svg = Snap("#svg");
       var cropId = this.crop;
       Vue.loadScript("/" + cropId + ".js").then(() => {
-        var svg = Snap("#svg");
-        var center = _resolveCenter(svg);
+        
         var obj = cropDefs.find(function(obj) {
           if (obj.id == cropId) {
             return obj;
           }
         });
         svg.clear();
-        var instance = window[obj.myClass];
-        new instance().draw(svg, center);
+        var myClass = obj.myClass;
+        var instance = eval(`new ${myClass}(svg)`);
+        instance.draw();
       });
     },
     onDisplayTraceRegulateurValueChanged: function(event) {
@@ -72,13 +76,18 @@ export default {
         .forEach(function(el) {
           display ? el.removeClass("hidden") : el.addClass("hidden");
         });
+    },
+    doExport: function(event) {
+      var svg = Snap("#svg");
+      clearTraceRegulateur(svg);
+      saveSvg(svg, this.crop + ".svg");
     }
   },
   mounted() {
     var self = this;
     Vue.loadScript("/crop_commons.js").then(() => {
       // tmp
-      self.crop = "boreham";
+      self.crop = "boxley";
       self.onCropSelected();
     });
   }

@@ -14,36 +14,8 @@ function polarToCartesian(centerX, centerY, radius, angle) {
 		y: centerY + (radius * Snap.sin(angle))
 	};
 }
-
-
-
-function pin(svg, pt) {
-	var c = svg.circle(pt.x, pt.y, 3).addClass('pin');
-	var lbl = pt.x.toFixed(2) + "; " + pt.y.toFixed(2);
-
-	var textBox;
-	function hover(event) {
-		var bbox = event.target.getBBox();
-		textBox = svg.text(bbox.x, bbox.y, lbl).addClass('tooltip');
-	}
-
-	function hout() {
-		textBox.remove();
-	}
-
-	c.hover(hover, hout);
-}
-
-function drawDiameter(svg, center, radius, angle) {
-	var x1 = center.x + (radius * Snap.cos(angle));
-	var y1 = center.y + (radius * Snap.sin(angle));
-	var x2 = center.x - (radius * Snap.cos(angle));
-	var y2 = center.y - (radius * Snap.sin(angle));
-	return svg.line(x1, y1, x2, y2).addClass('traceRegulateur');
-}
-
-
-/**
+/*
+**
  */
 function describeArc(x, y, radius, startAngle, endAngle) {
 	var start = polarToCartesian(x, y, radius, endAngle);
@@ -58,71 +30,227 @@ function describeArc(x, y, radius, startAngle, endAngle) {
 
 
 /**
+ * 
  */
-function _cercleRegulateur(s, center, radius) {
-	return s.circle(center.x, center.y, radius)
-		.addClass('traceRegulateur');
-	//		.animate({ r: radius }, 3000, mina.easeinout);
-}
-
-/**
- */
-function drawCerclesRegulateursCentres(s, _center, radius) {
-	for (var i = 0; i < radius.length; i++) {
-		_cercleRegulateur(s, _center, radius[i]);
+class AbstractCrop {
+	svg = null;
+	count = 0;
+	center = null;
+	cercles = [];
+	constructor(svg) {
+		this.svg = svg;
+		this.center = {
+			x: this.svg.paper.node.width.baseVal.value / 2,
+			y: this.svg.paper.node.height.baseVal.value / 2
+		}
 	}
-}
-
-/**
+	/**
+	 * Generate new id
 	 */
-function arcCircle(svg, center, radius, pt1, pt2) {
-	var startAngle = Snap.angle(
-		center.x + radius,
-		center.y,
-		pt1.x,
-		pt1.y,
-		center.x,
-		center.y
+	id = function () {
+		this.count += 1;
+		return 'id_' + this.count;
+	}
+	/**
+	 * Dessine un cercle
+	 */
+	drawCircle = function (pt, radius, type = 'traceRegulateur') {
+		var self = this;
+		var id = self.id();
+		var c = this.svg.circlePath(pt.x, pt.y, radius)
+			.addClass(type);
+		c.data('id', id);
+		c.data('center', JSON.stringify(pt));
+		c.data('radius', radius);
+		this.cercles.push(c);
+		var textBox;
+		function hover(event) {
+			var bbox = event.target.getBBox();
+			textBox = self.svg.text(bbox.x, bbox.y, id).addClass('tooltip');
+		}
+		function hout() {
+			textBox.remove();
+		}
+		c.hover(hover, hout);
+		c.click(function (event) {
+			textBox.remove();
+			c.remove();
+		});
 
-	);
-	var endAngle = Snap.angle(
-		center.x + radius,
-		center.y,
-		pt2.x,
-		pt2.y,
-		center.x,
-		center.y
-
-	);
-	var strPath = describeArc(center.x, center.y, radius, Math.abs(endAngle), Math.abs(startAngle));
-	var path = svg.path(strPath, center.x, center.y).addClass('trace');
-
-
-	var lbl = path.node.attributes.d.nodeValue;
-
-	var textBox;
-	function hover(event) {
-		var bbox = event.target.getBBox();
-		textBox = svg.text(bbox.x, bbox.y, lbl).addClass('tooltip');
+		return c;
 	}
 
-	function hout() { textBox.remove(); }
+	/**
+	 * Dessine plusieurs cercles centrés sur le point spécifié pour les rayon spécifiés
+	 */
+	drawCenteredCercles = function (pt, rayons) {
+		var self = this;
+		var cercles = [];
+		rayons.forEach(function (rayon) {
+			cercles.push(self.drawCircle(pt, rayon));
+		});
+		return cercles;
+	}
+	/**
+	 * Dessine un cercle de rayon spécifié pour chacun des centres spécifiés
+	 * @param {*} centers 
+	 * @param {*} radius 
+	 */
+	drawCircleForEachCenter(centers, radius, type = 'traceRegulateur') {
+		var self = this;
+		var circles = [];
+		centers.forEach(function (pt) {
+			circles.push(self.drawCircle(pt, radius, type));
+		});
+		return circles;
+	}
 
-	path.hover(hover, hout);
-	path.click(function () {
-		navigator.clipboard.writeText(lbl);
-	});
-	console.log(lbl);
-	return path;
+	/**
+	 * 
+	 */
+	drawDiameter = function (pt, radius, angle) {
+		var cos = radius * Snap.cos(angle);
+		var sin = radius * Snap.sin(angle);
+		return this.svg.line(pt.x + cos, pt.y + sin, pt.x - cos, pt.y - sin).addClass('traceRegulateur');
+	}
+
+	/**
+		 */
+	drawArcCircle(center, radius, pt1, pt2) {
+		var startAngle = Snap.angle(
+			center.x + radius,
+			center.y,
+			pt1.x,
+			pt1.y,
+			center.x,
+			center.y
+
+		);
+		var endAngle = Snap.angle(
+			center.x + radius,
+			center.y,
+			pt2.x,
+			pt2.y,
+			center.x,
+			center.y
+
+		);
+		var strPath = describeArc(center.x, center.y, radius, Math.abs(endAngle), Math.abs(startAngle));
+		var path = this.svg.path(strPath, center.x, center.y).addClass('trace');
+		return path;
+	}
+
+	/**
+	 * 
+	 * @param {*} pt 
+	 * @param {*} lbl 
+	 */
+	pinPoint(pt) {
+		var self = this;
+		var c = self.svg.circle(pt.x, pt.y, 3).addClass('pin');
+		var lbl = "{x:" + pt.x.toFixed(2) + ", " + pt.y.toFixed(2) + "}";
+		var textBox;
+		function hover(event) {
+			var bbox = event.target.getBBox();
+			textBox = self.svg.text(bbox.x, bbox.y, lbl).addClass('tooltip');
+		}
+		function hout() {
+			textBox.remove();
+		}
+		c.hover(hover, hout);
+	}
+
+	/**
+	 * 
+	 * @param {*} points 
+	 */
+	pinPoints(points) {
+		var self = this;
+		points.forEach(function (p, i) {
+			self.pinPoint(p);
+		});
+	}
+
+	findCircleById(id) {
+		var c = null;
+		this.cercles.forEach(function (cercle) {
+			if (cercle.data('id') == id) {
+				c = cercle;
+			}
+		})
+		return c;
+	}
+
+	findCenterByCircleId(id){
+		var c = this.findCircleById(id);
+		return JSON.parse(c.data('center'));
+	}
+
+	getCenter(circle) {
+		return JSON.parse(circle.data('center'));
+	}
+	getRadius(circle){
+		return Number.parseFloat(circle.data('radius'));
+	}
+
+	intersectionByIds(id1, id2) {
+		var c1 = this.findCircleById(id1);
+		var c2 = this.findCircleById(id2);
+		return Snap.path.intersection(c1, c2);
+	}
+
+}
+
+
+
+
+
+/**
+ * 
+ * @param {*} radius
+ * @param {*} center 
+ * @param {*} count 
+ * @param {*} startAngle 
+ */
+function circularDistibution(radius, center, count, startAngle) {
+	var points = [];
+	var step = 360 / count;
+	var ang = startAngle;
+	for (var i = 0; i < count; i++) {
+		ang += (i == 0) ? 0 : step;
+		var p = {
+			x: center.x + (Snap.cos(ang) * radius),
+			y: center.y - (Snap.sin(ang) * radius)
+		};
+		points.push(p);
+	}
+	return points;
 }
 
 /**
- *
+ * 
+ * @param {*} svgEl
+ * @param {*} name 
  */
-function _resolveCenter(svg) {
-	var w = svg.paper.node.width.baseVal.value;
-	var h = svg.paper.node.height.baseVal.value;
-	return { x: w / 2, y: h / 2 };
+function saveSvg(svgEl, name) {
+	var el = svgEl.node;
+	el.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+	var svgData = el.outerHTML;
+	var preface = '<?xml version="1.0" standalone="no"?>\r\n';
+	var svgBlob = new Blob([preface, svgData], { type: "image/svg+xml;charset=utf-8" });
+	var svgUrl = URL.createObjectURL(svgBlob);
+	var downloadLink = document.createElement("a");
+	downloadLink.href = svgUrl;
+	downloadLink.download = name;
+	document.body.appendChild(downloadLink);
+	downloadLink.click();
+	document.body.removeChild(downloadLink);
+}
+
+function clearTraceRegulateur(svg) {
+	svg.selectAll('.traceRegulateur').forEach(function (el) {
+		el.remove();
+	});
 }
 
 /**
