@@ -58,30 +58,27 @@ class Boxley extends AbstractCrop {
 		allCenters = allCenters.concat(pts);
 
 
-		this.pinPoints(allCenters);
+		//this.pinPoints(allCenters);
 
 		var rayons = [7.5, 20, 24, 28, 32];
 		var c1 = this.findCircleById('id_34');
 		var c2 = this.findCircleById('id_35');
 		var intersects = Snap.path.intersection(c1, c2);
-		this.pinPoint(intersects[0]);
 		this.drawCenteredCercles(intersects[0], rayons);
 
 		c1 = this.findCircleById('id_35');
 		c2 = this.findCircleById('id_36');
 		intersects = Snap.path.intersection(c1, c2);
-		this.pinPoint(intersects[0]);
 		this.drawCenteredCercles(intersects[0], rayons);
 
 		c1 = this.findCircleById('id_36');
 		c2 = this.findCircleById('id_34');
 		intersects = Snap.path.intersection(c1, c2);
-		this.pinPoint(intersects[0]);
 		this.drawCenteredCercles(intersects[0], rayons);
 
 
 		// petale superieur
-		var pt, pt1, pt2, pt3, c, arc, arc1, arc2, arc3 = null;
+		var pt, pt1, pt2, pt3, pt4, c, arc, arc1, arc2, arc3 = null;
 		pt1 = this.intersectionByIds('id_22', 'id_24')[1];
 		pt2 = this.intersectionByIds('id_21', 'id_24')[1];
 		pt3 = this.intersectionByIds('id_22', 'id_21')[1];
@@ -111,6 +108,8 @@ class Boxley extends AbstractCrop {
 		arc = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt1, pt);
 		group.add(arc);
 
+
+
 		// -- inner
 		pt1 = this.intersectionByIds('id_35', 'id_41')[0];
 		pt2 = this.intersectionByIds('id_34', 'id_41')[1];
@@ -118,10 +117,24 @@ class Boxley extends AbstractCrop {
 		arc = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt2, pt1);
 		group.add(arc);
 
+		pt = this.intersectionByIds('id_35', 'id_40')[0];
+		c = this.findCircleById('id_35');
+		arc = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt1, pt);
+		group.add(arc);
 
+		pt4 = this.intersectionByIds('id_34', 'id_40')[1];
+		c = this.findCircleById('id_40');
+		arc = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt4, pt);
+		group.add(arc);
+
+		c = this.findCircleById('id_34');
+		arc = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt2, pt4);
+		group.add(arc);
 
 		group.clone().transform('r120,' + this.center.x + ',' + this.center.y);
 		group.clone().transform('r240,' + this.center.x + ',' + this.center.y);
+
+		// *************
 
 	}
 }
