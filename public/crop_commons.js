@@ -37,6 +37,7 @@ class AbstractCrop {
 	count = 0;
 	center = null;
 	cercles = [];
+	pinable = true;
 	constructor(svg) {
 		this.svg = svg;
 		this.center = {
@@ -146,18 +147,20 @@ class AbstractCrop {
 	 * @param {*} lbl 
 	 */
 	pinPoint(pt) {
-		var self = this;
-		var c = self.svg.circle(pt.x, pt.y, 3).addClass('pin');
-		var lbl = "{x:" + pt.x.toFixed(2) + ", " + pt.y.toFixed(2) + "}";
-		var textBox;
-		function hover(event) {
-			var bbox = event.target.getBBox();
-			textBox = self.svg.text(bbox.x, bbox.y, lbl).addClass('tooltip');
+		if (this.pinable) {
+			var self = this;
+			var c = self.svg.circle(pt.x, pt.y, 1).addClass('pin');
+			var lbl = "{x:" + pt.x.toFixed(2) + ", " + pt.y.toFixed(2) + "}";
+			var textBox;
+			function hover(event) {
+				var bbox = event.target.getBBox();
+				textBox = self.svg.text(bbox.x, bbox.y, lbl).addClass('tooltip');
+			}
+			function hout() {
+				textBox.remove();
+			}
+			c.hover(hover, hout);
 		}
-		function hout() {
-			textBox.remove();
-		}
-		c.hover(hover, hout);
 	}
 
 	/**
@@ -181,7 +184,7 @@ class AbstractCrop {
 		return c;
 	}
 
-	findCenterByCircleId(id){
+	findCenterByCircleId(id) {
 		var c = this.findCircleById(id);
 		return JSON.parse(c.data('center'));
 	}
@@ -189,7 +192,7 @@ class AbstractCrop {
 	getCenter(circle) {
 		return JSON.parse(circle.data('center'));
 	}
-	getRadius(circle){
+	getRadius(circle) {
 		return Number.parseFloat(circle.data('radius'));
 	}
 
