@@ -5,7 +5,7 @@ class Boxley extends AbstractCrop {
 	}
 
 	draw = function (svg, center) {
-		this.pinable = true;
+		this.pinable = false;
 
 		var radius = [48, 180];
 

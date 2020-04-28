@@ -87,7 +87,7 @@ export default {
     var self = this;
     Vue.loadScript("/crop_commons.js").then(() => {
       // tmp
-      self.crop = "boxley";
+      self.crop = "westdown";
       self.onCropSelected();
     });
   }
