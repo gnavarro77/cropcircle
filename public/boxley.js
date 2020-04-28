@@ -4,12 +4,11 @@ class Boxley extends AbstractCrop {
 		super(svg);
 	}
 
-	draw = function (svg, center) {
+	draw = function () {
 		this.pinable = false;
 
 		var radius = [48, 180];
 
-		//drawCerclesRegulateursCentres(svg, center, radius);
 		this.drawCenteredCercles(this.center, radius);
 
 		this.drawDiameter(this.center, radius[1] + 5, 0);

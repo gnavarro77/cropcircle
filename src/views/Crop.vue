@@ -39,7 +39,8 @@
 const cropDefs = [
   { id: "westdown", label: "West Down", myClass: "WestDown" },
   { id: "boreham", label: "Boreham", myClass: "Boreham" },
-  { id: "boxley", label: "Boxley", myClass: "Boxley" }
+  { id: "boxley", label: "Boxley", myClass: "Boxley" },
+  { id: "hadorf", label: "Hadorf", myClass: "Hadorf" }
 ];
 
 export default {
@@ -87,7 +88,7 @@ export default {
     var self = this;
     Vue.loadScript("/crop_commons.js").then(() => {
       // tmp
-      self.crop = "westdown";
+      self.crop = "hadorf";
       self.onCropSelected();
     });
   }

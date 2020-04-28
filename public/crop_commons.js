@@ -52,6 +52,11 @@ class AbstractCrop {
 		this.count += 1;
 		return 'id_' + this.count;
 	}
+
+	drawLine = function (pt1, pt2) {
+		return this.svg.line(pt1.x, pt1.y, pt2.x, pt2.y).addClass('trace');
+	}
+
 	/**
 	 * Dessine un cercle
 	 */
@@ -84,11 +89,11 @@ class AbstractCrop {
 	/**
 	 * Dessine plusieurs cercles centrés sur le point spécifié pour les rayon spécifiés
 	 */
-	drawCenteredCercles = function (pt, rayons) {
+	drawCenteredCercles = function (pt, rayons, type = 'traceRegulateur') {
 		var self = this;
 		var cercles = [];
 		rayons.forEach(function (rayon) {
-			cercles.push(self.drawCircle(pt, rayon));
+			cercles.push(self.drawCircle(pt, rayon, type));
 		});
 		return cercles;
 	}
