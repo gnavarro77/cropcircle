@@ -4,7 +4,7 @@ class Hadorf extends AbstractCrop {
 	}
 
 	draw = function () {
-		this.pinable = true;
+		this.pinable = false;
 		var rayons = [14, 32, 45, 60, 90, 120, 150, 180];
 		var maxRadius = rayons[rayons.length - 1];
 

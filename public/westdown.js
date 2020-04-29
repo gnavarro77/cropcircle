@@ -43,11 +43,11 @@ class WestDown extends AbstractCrop {
 		pt3 = intersects[1];
 		this.pinPoint(pt3);
 
-		c = this.findCircleById('id_12');
+		c = this.findElementById('id_12');
 		arc1 = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt1, pt2);
-		c = this.findCircleById('id_13');
+		c = this.findElementById('id_13');
 		arc2 = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt3, pt2);
-		c = this.findCircleById('id_8');
+		c = this.findElementById('id_8');
 		arc3 = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt3, pt1);
 
 		group = this.svg.group(arc1, arc2, arc3);
@@ -65,13 +65,13 @@ class WestDown extends AbstractCrop {
 		intersects = this.intersectionByIds('id_6', 'id_8');
 		pt3 = intersects[0];
 		this.pinPoint(pt3);
-		c = this.findCircleById('id_5');
+		c = this.findElementById('id_5');
 		arc1 = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt1, pt2);
 		group.add(arc1);
-		c = this.findCircleById('id_13');
+		c = this.findElementById('id_13');
 		arc1 = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt2, pt3);
 		group.add(arc1);
-		c = this.findCircleById('id_8');
+		c = this.findElementById('id_8');
 		arc1 = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt1, pt3);
 		group.add(arc1);
 
@@ -90,13 +90,13 @@ class WestDown extends AbstractCrop {
 		pt3 = intersects[1];
 		this.pinPoint(pt3);
 
-		c = this.findCircleById('id_6');
+		c = this.findElementById('id_6');
 		arc = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt2, pt1);
 		group.add(arc);
-		c = this.findCircleById('id_10');
+		c = this.findElementById('id_10');
 		arc = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt3, pt2);
 		group.add(arc);
-		c = this.findCircleById('id_8');
+		c = this.findElementById('id_8');
 		arc = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt1, pt3);
 		group.add(arc);
 

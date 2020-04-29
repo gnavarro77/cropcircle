@@ -14,6 +14,16 @@ function polarToCartesian(centerX, centerY, radius, angle) {
 		y: centerY + (radius * Snap.sin(angle))
 	};
 }
+/**
+ * 
+ * @param {*} ptA 
+ * @param {*} ptB 
+ */
+function midPoint(ptA, ptB) {
+	return { x: (ptA.x + ptB.x) / 2, y: (ptA.y + ptB.y) / 2 };
+}
+
+
 /*
 **
  */
@@ -36,7 +46,9 @@ class AbstractCrop {
 	svg = null;
 	count = 0;
 	center = null;
+	elements = [];
 	cercles = [];
+
 	pinable = true;
 	constructor(svg) {
 		this.svg = svg;
@@ -53,8 +65,47 @@ class AbstractCrop {
 		return 'id_' + this.count;
 	}
 
-	drawLine = function (pt1, pt2) {
-		return this.svg.line(pt1.x, pt1.y, pt2.x, pt2.y).addClass('trace');
+	_track(element, id) {
+		var self = this;
+		var textBox;
+		function hover(event) {
+			var bbox = event.target.getBBox();
+			textBox = self.svg.text(bbox.x, bbox.y, id).addClass('tooltip');
+		}
+		function hout() {
+			textBox.remove();
+		}
+		element.hover(hover, hout);
+		element.click(function (event) {
+			textBox.remove();
+			element.remove();
+		});
+		return element;
+	}
+
+	drawLine = function (pt1, pt2, type = 'traceRegulateur') {
+		var expr = "M" + pt1.x + "," + pt1.y;
+		expr += " L" + pt2.x + ", " + pt2.y;
+		//var line = this.svg.line(pt1.x, pt1.y, pt2.x, pt2.y);
+		var line = this.svg.path(expr);
+		line.addClass(type);
+		var id = this.id();
+		line.data('id', id);
+		line.data('A', JSON.stringify(pt1));
+		line.data('B', JSON.stringify(pt2));
+		this._track(line, id);
+		this.elements.push(line);
+		return line;
+	}
+
+	drawTriangle = function (pts, type = 'traceRegulateur') {
+		var self = this;
+		var lines = [];
+		for (var i = 0; i < pts.length; i++) {
+			var idx = (i < pts.length - 1) ? i + 1 : 0;
+			lines.push(self.drawLine(pts[i], pts[idx], type));
+		}
+		return lines;
 	}
 
 	/**
@@ -68,21 +119,8 @@ class AbstractCrop {
 		c.data('id', id);
 		c.data('center', JSON.stringify(pt));
 		c.data('radius', radius);
-		this.cercles.push(c);
-		var textBox;
-		function hover(event) {
-			var bbox = event.target.getBBox();
-			textBox = self.svg.text(bbox.x, bbox.y, id).addClass('tooltip');
-		}
-		function hout() {
-			textBox.remove();
-		}
-		c.hover(hover, hout);
-		c.click(function (event) {
-			textBox.remove();
-			c.remove();
-		});
-
+		this.elements.push(c);
+		this._track(c, id);
 		return c;
 	}
 
@@ -146,6 +184,53 @@ class AbstractCrop {
 		return path;
 	}
 
+	rotate(el, pt, angle) {
+		var oldPath = el.node.getAttribute('d');
+		var matrix = new Snap.Matrix();
+		matrix.rotate(angle, pt.x, pt.y);
+		var newPath = Snap.path.map(oldPath, matrix);
+		var clone = this.svg.path(newPath);
+		var id = this.id();
+		clone.addClass('traceRegulateur');
+		clone.data('id', id);
+		clone = this._track(clone, id);
+		this.elements.push(clone);
+		//el.transform('r' + angle + ',' + pt.x + ',' + pt.y);
+		return clone;
+	}
+
+	translateFromAToBMatrix(A, B) {
+		var matrix = new Snap.Matrix();
+		matrix.translate(B.x - A.x, B.y - A.y);
+		return matrix;
+	}
+
+	translateFromAToB(el, A, B) {
+		var oldPath = el.node.getAttribute('d');
+		var matrix = this.translateFromAToBMatrix(A, B);
+		var newPath = Snap.path.map(oldPath, matrix);
+		var clone = this.svg.path(newPath);
+		var id = this.id();
+		clone.addClass('traceRegulateur');
+		clone.data('id', id);
+		this._track(clone, id);
+		this.elements.push(clone);
+		return clone;
+	}
+
+	/**
+	 * 
+	 * @param {*} path 
+	 */
+	clone(el) {
+		var clone = el.clone();
+		var id = this.id();
+		clone.data('id', id);
+		clone = this._track(clone, id);
+		this.elements.push(clone);
+		return clone;
+	}
+
 	/**
 	 * 
 	 * @param {*} pt 
@@ -179,19 +264,14 @@ class AbstractCrop {
 		});
 	}
 
-	findCircleById(id) {
+	findElementById(id) {
 		var c = null;
-		this.cercles.forEach(function (cercle) {
+		this.elements.forEach(function (cercle) {
 			if (cercle.data('id') == id) {
 				c = cercle;
 			}
 		})
 		return c;
-	}
-
-	findCenterByCircleId(id) {
-		var c = this.findCircleById(id);
-		return JSON.parse(c.data('center'));
 	}
 
 	getCenter(circle) {
@@ -201,9 +281,13 @@ class AbstractCrop {
 		return Number.parseFloat(circle.data('radius'));
 	}
 
+	getLineExtremity(line, extremityName) {
+		return JSON.parse(line.data(extremityName));
+	}
+
 	intersectionByIds(id1, id2) {
-		var c1 = this.findCircleById(id1);
-		var c2 = this.findCircleById(id2);
+		var c1 = this.findElementById(id1);
+		var c2 = this.findElementById(id2);
 		return Snap.path.intersection(c1, c2);
 	}
 
