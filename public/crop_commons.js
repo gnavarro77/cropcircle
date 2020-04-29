@@ -218,6 +218,16 @@ class AbstractCrop {
 		return clone;
 	}
 
+	mandalize(el, count){
+		var step = 360 / count;
+		var angle = null;
+		for (var i =1; i < count; i++){
+			angle = i * step;
+			el.clone().transform('r'+angle+',' + this.center.x + ',' + this.center.y);
+		}
+	}
+
+
 	/**
 	 * 
 	 * @param {*} path 
