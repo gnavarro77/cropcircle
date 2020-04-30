@@ -6,6 +6,9 @@ Snap.plugin(function (Snap, Element, Paper, global) {
 		p += "a" + r + "," + r + " 0 1,0 " + -(r * 2) + ",0";
 		return this.path(p, cx, cy);
 	};
+
+
+
 });
 
 function polarToCartesian(centerX, centerY, radius, angle) {
@@ -217,12 +220,12 @@ class AbstractCrop {
 		return clone;
 	}
 
-	mandalize(el, count){
+	mandalize(el, count) {
 		var step = 360 / count;
 		var angle = null;
-		for (var i =1; i < count; i++){
+		for (var i = 1; i < count; i++) {
 			angle = i * step;
-			el.clone().transform('r'+angle+',' + this.center.x + ',' + this.center.y);
+			el.clone().transform('r' + angle + ',' + this.center.x + ',' + this.center.y);
 		}
 	}
 
@@ -300,11 +303,11 @@ class AbstractCrop {
 		return Snap.path.intersection(c1, c2);
 	}
 
-	drawCircularDistribution(center, radius, count, startAngle=0){
+	drawCircularDistribution(center, radius, count, startAngle = 0) {
 		var self = this;
 		var distrib = circularDistibution(radius, center, count, startAngle);
 		var lines = [];
-		distrib.forEach(function(pt){
+		distrib.forEach(function (pt) {
 			lines.push(self.drawLine(self.center, pt));
 		});
 		return lines;
@@ -319,6 +322,15 @@ class AbstractCrop {
 
 
 
+function getDistanceBetweenPoints(pt1, pt2) {
+	var x1 = pt1.x;
+	var x2 = pt2.x;
+	var y1 = pt1.y;
+	var y2 = pt2.y;
+	var lineLength = Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2));
+	return lineLength;
+
+}
 
 
 /**

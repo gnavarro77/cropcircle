@@ -6,7 +6,7 @@ class HoneyStreet extends AbstractCrop {
 
 	draw = function (svg, center) {
 		var self = this;
-		this.pinable = true;
+		this.pinable = false;
 
 		var rayons = [44, 56, 60, 180];
 		var maxRadius = rayons[rayons.length - 1];
@@ -39,7 +39,7 @@ class HoneyStreet extends AbstractCrop {
 		pts = circularDistibution(120, this.center, 5, 18);
 		this.pinPoints(pts);
 		pts.forEach(function (pt) {
-			self.drawCircle(pt, 6);
+			self.drawCircle(pt, 6, 'trace');
 		});
 
 
@@ -57,6 +57,16 @@ class HoneyStreet extends AbstractCrop {
 		this.pinPoint(pt);
 		group.add(this.drawCircle(pt, 4, 'trace'));
 		self.mandalize(group, 5);
+
+		// ---
+		pt = this.intersectionByIds('id_59', 'id_23')[1];
+		this.pinPoint(pt);
+		var r = getDistanceBetweenPoints(pt, self.center);
+		pts = circularDistibution(r, this.center, 5, -18);
+		this.pinPoints(pts);
+		pts.forEach(function (pt) {
+			self.drawCircle(pt, 12,'trace');
+		});
 
 		// ---
 		pt1 = this.intersectionByIds('id_46', 'id_54')[1];
