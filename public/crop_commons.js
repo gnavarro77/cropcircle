@@ -86,7 +86,6 @@ class AbstractCrop {
 	drawLine = function (pt1, pt2, type = 'traceRegulateur') {
 		var expr = "M" + pt1.x + "," + pt1.y;
 		expr += " L" + pt2.x + ", " + pt2.y;
-		//var line = this.svg.line(pt1.x, pt1.y, pt2.x, pt2.y);
 		var line = this.svg.path(expr);
 		line.addClass(type);
 		var id = this.id();
@@ -299,6 +298,21 @@ class AbstractCrop {
 		var c1 = this.findElementById(id1);
 		var c2 = this.findElementById(id2);
 		return Snap.path.intersection(c1, c2);
+	}
+
+	drawCircularDistribution(center, radius, count, startAngle=0){
+		var self = this;
+		var distrib = circularDistibution(radius, center, count, startAngle);
+		var lines = [];
+		distrib.forEach(function(pt){
+			lines.push(self.drawLine(self.center, pt));
+		});
+		return lines;
+	}
+
+	makeAsTrace(el) {
+		el.removeClass('traceRegulateur');
+		el.addClass('trace');
 	}
 
 }
