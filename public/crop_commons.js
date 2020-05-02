@@ -26,7 +26,6 @@ function midPoint(ptA, ptB) {
 	return { x: (ptA.x + ptB.x) / 2, y: (ptA.y + ptB.y) / 2 };
 }
 
-
 /*
 **
  */
