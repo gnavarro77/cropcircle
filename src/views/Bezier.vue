@@ -27,13 +27,13 @@ export default {
   },
   methods: {
     draw: function(event) {
+    console.log('darw');
       var s = Snap("#svg");
-      //var w = s.paper.node.width.baseVal.value;
-      //var h = s.paper.node.height.baseVal.value;
       s.clear();
       s.path(this.path, 100, 100).addClass('liveexample');
-
-      // alert(this.message);
+    },
+    mounted : function() {
+    	console.log('mounted');
     }
   }
 };

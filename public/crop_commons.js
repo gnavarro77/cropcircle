@@ -1,5 +1,5 @@
-Snap.plugin(function (Snap, Element, Paper, global) {
-	Paper.prototype.circlePath = function (cx, cy, r) {
+Snap.plugin(function(Snap, Element, Paper, global) {
+	Paper.prototype.circlePath = function(cx, cy, r) {
 		var p = "M" + cx + "," + cy;
 		p += "m" + -r + ",0";
 		p += "a" + r + "," + r + " 0 1,0 " + (r * 2) + ",0";
@@ -63,7 +63,7 @@ class AbstractCrop {
 	/**
 	 * Generate new id
 	 */
-	id = function () {
+	id = function() {
 		this.count += 1;
 		return 'id_' + this.count;
 	}
@@ -79,14 +79,14 @@ class AbstractCrop {
 			textBox.remove();
 		}
 		element.hover(hover, hout);
-		element.click(function (event) {
+		element.click(function(event) {
 			textBox.remove();
 			element.remove();
 		});
 		return element;
 	}
 
-	drawLine = function (pt1, pt2, type = 'traceRegulateur') {
+	drawLine = function(pt1, pt2, type = 'traceRegulateur') {
 		var expr = "M" + pt1.x + "," + pt1.y;
 		expr += " L" + pt2.x + ", " + pt2.y;
 		var line = this.svg.path(expr);
@@ -100,7 +100,7 @@ class AbstractCrop {
 		return line;
 	}
 
-	drawTriangle = function (pts, type = 'traceRegulateur') {
+	drawTriangle = function(pts, type = 'traceRegulateur') {
 		var self = this;
 		var lines = [];
 		for (var i = 0; i < pts.length; i++) {
@@ -113,7 +113,7 @@ class AbstractCrop {
 	/**
 	 * Dessine un cercle
 	 */
-	drawCircle = function (pt, radius, type = 'traceRegulateur') {
+	drawCircle = function(pt, radius, type = 'traceRegulateur') {
 		var self = this;
 		var id = self.id();
 		var c = this.svg.circlePath(pt.x, pt.y, radius)
@@ -129,10 +129,10 @@ class AbstractCrop {
 	/**
 	 * Dessine plusieurs cercles centrés sur le point spécifié pour les rayon spécifiés
 	 */
-	drawCenteredCercles = function (pt, rayons, type = 'traceRegulateur') {
+	drawCenteredCercles = function(pt, rayons, type = 'traceRegulateur') {
 		var self = this;
 		var cercles = [];
-		rayons.forEach(function (rayon) {
+		rayons.forEach(function(rayon) {
 			cercles.push(self.drawCircle(pt, rayon, type));
 		});
 		return cercles;
@@ -145,7 +145,7 @@ class AbstractCrop {
 	drawCircleForEachCenter(centers, radius, type = 'traceRegulateur') {
 		var self = this;
 		var circles = [];
-		centers.forEach(function (pt) {
+		centers.forEach(function(pt) {
 			circles.push(self.drawCircle(pt, radius, type));
 		});
 		return circles;
@@ -154,7 +154,7 @@ class AbstractCrop {
 	/**
 	 * 
 	 */
-	drawDiameter = function (pt, radius, angle) {
+	drawDiameter = function(pt, radius, angle) {
 		var cos = radius * Snap.cos(angle);
 		var sin = radius * Snap.sin(angle);
 		return this.svg.line(pt.x + cos, pt.y + sin, pt.x - cos, pt.y - sin).addClass('traceRegulateur');
@@ -220,15 +220,33 @@ class AbstractCrop {
 		return clone;
 	}
 
+	/**
+	 * Draw lines between the specified points
+	 */
+	drawLines(pts, type = 'traceRegulateur') {
+		var self = this;
+		var idx, pt2 = null, lines = [];
+		pts.forEach(function(pt1, i) {
+			idx = (i < pts.length - 1) ? i + 1 : 0;
+			pt2 = pts[idx];
+			lines.push(self.drawLine(pt1, pt2, type));
+		});
+		return lines;
+	}
+
 	mandalize(el, count) {
 		var step = 360 / count;
 		var angle = null;
+		var clone = null;
+		var clones = [];
 		for (var i = 1; i < count; i++) {
 			angle = i * step;
-			el.clone().transform('r' + angle + ',' + this.center.x + ',' + this.center.y);
+			clone = el.clone();
+			clone.transform('r' + angle + ',' + this.center.x + ',' + this.center.y);
+			clones.push(clone);
 		}
+		return clones;
 	}
-
 
 	/**
 	 * 
@@ -249,6 +267,9 @@ class AbstractCrop {
 	 * @param {*} lbl 
 	 */
 	pinPoint(pt) {
+		if (pt == null) {
+			throw new Error('Can not pin null point!');
+		}
 		if (this.pinable) {
 			var self = this;
 			var c = self.svg.circle(pt.x, pt.y, 1).addClass('pin');
@@ -271,14 +292,14 @@ class AbstractCrop {
 	 */
 	pinPoints(points) {
 		var self = this;
-		points.forEach(function (p, i) {
+		points.forEach(function(p, i) {
 			self.pinPoint(p);
 		});
 	}
 
 	findElementById(id) {
 		var c = null;
-		this.elements.forEach(function (cercle) {
+		this.elements.forEach(function(cercle) {
 			if (cercle.data('id') == id) {
 				c = cercle;
 			}
@@ -299,7 +320,13 @@ class AbstractCrop {
 
 	intersectionByIds(id1, id2) {
 		var c1 = this.findElementById(id1);
+		if (c1 == null) {
+			throw new Error('id : ' + id1 + ' not found');
+		}
 		var c2 = this.findElementById(id2);
+		if (c2 == null) {
+			throw new Error('id : ' + id2 + ' not found');
+		}
 		return Snap.path.intersection(c1, c2);
 	}
 
@@ -307,7 +334,7 @@ class AbstractCrop {
 		var self = this;
 		var distrib = circularDistibution(radius, center, count, startAngle);
 		var lines = [];
-		distrib.forEach(function (pt) {
+		distrib.forEach(function(pt) {
 			lines.push(self.drawLine(self.center, pt));
 		});
 		return lines;
@@ -318,10 +345,65 @@ class AbstractCrop {
 		el.addClass('trace');
 	}
 
+	normalizeCoordinates = function(el) {
+		var newEl = null;
+		var type = el.node.nodeName;
+		var transformAttr = el.node.getAttribute('transform');
+		if (transformAttr) {
+			if (type == 'path') {
+				console.log('normalize coordinates...');
+				var t = transformAttr.parseTransform();
+				console.log('transform attr : ' + transformAttr);
+				var matrix = Snap.matrix(t.matrix.a, t.matrix.b, t.matrix.c, t.matrix.d, t.matrix.e, t.matrix.f);
+				console.log('transform attr 2 : ' + matrix.toTransformString());
+				console.log('old path : ' + el.node.getAttribute('d'));
+				var newPath = Snap.path.map(el.node.getAttribute('d'), matrix);
+				var newEl = this.svg.path(newPath);
+				console.log('new path : ' + newPath);
+				newEl.addClass(el.node.getAttribute('class'));
+				var id = this.id();
+				newEl.data('id', id);
+				newEl = this._track(newEl, id);
+				this.elements.push(newEl);
+				el.remove();
+			}
+		}
+		return newEl;
+	}
+
 }
 
 
 
+class LineEquation {
+	// y = slope * x + b
+	pt1 = null;
+	pt2 = null;
+	slope = null;
+	b = null;
+	constructor(pt1, pt2) {
+		this.pt1 = pt1;
+		this.pt2 = pt2;
+		this.slope = this.slope(pt1, pt2);
+
+		this.b = pt1.y - (this.slope * pt1.x);
+	}
+	slope = function(pt1, pt2) {
+		return (pt2.y - pt1.y) / (pt2.x - pt1.x);
+	}
+
+	getY = function(x) {
+		return this.slope * x + this.b;
+	}
+
+	expr = function() {
+		return 'Y=' + this.slope + ' * X + ' + this.b;
+	}
+
+}
+
+/**
+ */
 function getDistanceBetweenPoints(pt1, pt2) {
 	var x1 = pt1.x;
 	var x2 = pt2.x;
@@ -376,7 +458,7 @@ function saveSvg(svgEl, name) {
 }
 
 function clearTraceRegulateur(svg) {
-	svg.selectAll('.traceRegulateur').forEach(function (el) {
+	svg.selectAll('.traceRegulateur').forEach(function(el) {
 		el.remove();
 	});
 }
@@ -385,7 +467,7 @@ function clearTraceRegulateur(svg) {
  */
 function _debug(obj) {
 	if (Array.isArray(obj)) {
-		obj.forEach(function (el) {
+		obj.forEach(function(el) {
 			pin({ x: el.x, y: el.y });
 		});
 	} else {
