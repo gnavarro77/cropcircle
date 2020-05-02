@@ -156,7 +156,14 @@ class AbstractCrop {
 	drawDiameter = function(pt, radius, angle) {
 		var cos = radius * Snap.cos(angle);
 		var sin = radius * Snap.sin(angle);
-		return this.svg.line(pt.x + cos, pt.y + sin, pt.x - cos, pt.y - sin).addClass('traceRegulateur');
+		//var line = this.svg.line(pt.x + cos, pt.y + sin, pt.x - cos, pt.y - sin).addClass('traceRegulateur');
+		var line = this.drawLine({x:pt.x + cos,y:pt.y + sin}, {x:pt.x - cos,y:pt.y - sin});
+		line.addClass('traceRegulateur');
+		var id = this.id();
+		line.data('id', id);
+		line = this._track(line, id);
+		this.elements.push(line);
+		return line;
 	}
 
 	/**
