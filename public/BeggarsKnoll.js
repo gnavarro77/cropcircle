@@ -5,7 +5,7 @@ class BeggarsKnoll extends AbstractCrop {
 
 	draw = function() {
 		var self = this;
-		this.pinable = true;
+		this.pinable = false;
 
 		var rayons = [108, 140, 180, 200, 220, 240];
 		self.drawCenteredCercles(self.center, rayons);
@@ -48,7 +48,7 @@ class BeggarsKnoll extends AbstractCrop {
 		group.add(this.drawArcCircle(this.getCenter(cercle), this.getRadius(cercle), pts[1], pts[0]));
 		cercle = self.findElementById('id_1');
 		group.add(this.drawArcCircle(this.getCenter(cercle), this.getRadius(cercle), pts[1], pts[0]));
-		//group.clone().transform('r 180, ' + self.center.x + ','+self.center.y);
+		group.clone().transform('r 180, ' + self.center.x + ','+self.center.y);
 		
 		group = self.svg.group();
 		//
@@ -57,12 +57,12 @@ class BeggarsKnoll extends AbstractCrop {
 		group.add(this.drawArcCircle(this.getCenter(cercle), this.getRadius(cercle), pts[0], pts[1]));
 		cercle = self.findElementById('id_25');
 		group.add(this.drawArcCircle(this.getCenter(cercle), this.getRadius(cercle), pts[1], pts[0]));
-		//group.clone().transform('r 180, ' + self.center.x + ','+self.center.y);
+		group.clone().transform('r 180, ' + self.center.x + ','+self.center.y);
 		
 		
 		//
 		var pt1, pt2, pt3, pt4 = null;
-		/*
+		
 		group = self.svg.group();
 		pt1 = this.intersectionByIds('id_17', 'id_32')[0];
 		pt2 = this.intersectionByIds('id_17', 'id_10')[0];
@@ -119,9 +119,10 @@ class BeggarsKnoll extends AbstractCrop {
 		cercle = self.findElementById('id_25');
 		group.add(this.drawArcCircle(this.getCenter(cercle), this.getRadius(cercle), pt1, pt3));
 		
-		group.clone().transform('s-1 1,' + self.center.x + ', ' + self.center.y);
-		*/
+		group.add(group.clone().transform('s-1 1,' + self.center.x + ', ' + self.center.y));
+		group.clone().transform('s1 -1,' + self.center.x + ', ' + self.center.y);
 		
+		// ---
 		group = self.svg.group();
 		pt1 = this.intersectionByIds('id_17', 'id_32')[0];
 		pt2 = this.intersectionByIds('id_18', 'id_25')[1];
@@ -134,6 +135,39 @@ class BeggarsKnoll extends AbstractCrop {
 		cercle = self.findElementById('id_33');
 		group.add(this.drawArcCircle(this.getCenter(cercle), this.getRadius(cercle), pt2, pt3));
 		
+		pt1 = this.intersectionByIds('id_34', 'id_8')[1];
+		pt2 = this.intersectionByIds('id_34', 'id_25')[0];
+		pt3 = this.intersectionByIds('id_35', 'id_25')[0];
+		pt4 = this.intersectionByIds('id_35', 'id_8')[1];
+		self.pinPoint(pt1);
+		self.pinPoint(pt2);
+		self.pinPoint(pt3);
+		self.pinPoint(pt4);
+		
+		cercle = self.findElementById('id_34');
+		group.add(this.drawArcCircle(this.getCenter(cercle), this.getRadius(cercle), pt2, pt1));
+		cercle = self.findElementById('id_25');
+		group.add(this.drawArcCircle(this.getCenter(cercle), this.getRadius(cercle), pt2, pt3));
+		cercle = self.findElementById('id_35');
+		group.add(this.drawArcCircle(this.getCenter(cercle), this.getRadius(cercle), pt3, pt4));
+		
+		pt1 = this.intersectionByIds('id_36', 'id_25')[0];
+		self.pinPoint(pt1);
+		pt2 = this.intersectionByIds('id_37', 'id_25')[0];
+		self.pinPoint(pt2);
+		cercle = self.findElementById('id_25');
+		group.add(this.drawArcCircle(this.getCenter(cercle), this.getRadius(cercle), pt1, pt2));
+		pt3 = this.intersectionByIds('id_37', 'id_31')[0];
+		self.pinPoint(pt3);
+		cercle = self.findElementById('id_37');
+		group.add(this.drawArcCircle(this.getCenter(cercle), this.getRadius(cercle), pt2, pt3));
+		pt4 = this.intersectionByIds('id_36', 'id_30')[0];
+		self.pinPoint(pt4);
+		cercle = self.findElementById('id_36');
+		group.add(this.drawArcCircle(this.getCenter(cercle), this.getRadius(cercle), pt1, pt4));
+		var clone = group.clone().transform('s1 -1,' + self.center.x + ', ' + self.center.y);
+		group.add(clone);
+		group.clone().transform('s-1 1,' + self.center.x + ', ' + self.center.y);
 		
 		
 	}
