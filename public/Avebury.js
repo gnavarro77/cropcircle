@@ -5,7 +5,7 @@ class Avebury extends AbstractCrop {
 
 	draw = function() {
 		var self = this;
-		this.pinable = true;
+		this.pinable = false;
 
 
 		var rayons = [28, 56, 80, 175, 180];
@@ -212,6 +212,9 @@ class Avebury extends AbstractCrop {
 		group.add(self.drawLine(pts[0], pts[3], 'trace'));
 		
 		self.pinPoints(pts);
+		
+		group.clone().transform('r180 ' + self.center.x +','+self.center.y+', s-1 1');
+		
 	}
 
 }
