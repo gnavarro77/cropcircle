@@ -428,7 +428,7 @@ function getDistanceBetweenPoints(pt1, pt2) {
  * @param {*} count 
  * @param {*} startAngle 
  */
-function circularDistibution(radius, center, count, startAngle) {
+function circularDistibution(radius, center, count, startAngle = 0) {
 	var points = [];
 	var step = 360 / count;
 	var ang = startAngle;
