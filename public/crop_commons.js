@@ -336,12 +336,12 @@ class AbstractCrop {
 		return Snap.path.intersection(c1, c2);
 	}
 
-	drawCircularDistribution(center, radius, count, startAngle = 0) {
+	drawCircularDistribution(center, radius, count, startAngle = 0, type='traceRegulateur') {
 		var self = this;
 		var distrib = circularDistibution(radius, center, count, startAngle);
 		var lines = [];
 		distrib.forEach(function(pt) {
-			lines.push(self.drawLine(self.center, pt));
+			lines.push(self.drawLine(self.center, pt, type));
 		});
 		return lines;
 	}
