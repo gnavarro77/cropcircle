@@ -192,14 +192,14 @@ class AbstractCrop {
 		return path;
 	}
 
-	rotate(el, pt, angle) {
+	rotate(el, pt, angle, type='traceRegulateur') {
 		var oldPath = el.node.getAttribute('d');
 		var matrix = new Snap.Matrix();
 		matrix.rotate(angle, pt.x, pt.y);
 		var newPath = Snap.path.map(oldPath, matrix);
 		var clone = this.svg.path(newPath);
 		var id = this.id();
-		clone.addClass('traceRegulateur');
+		clone.addClass(type);
 		clone.data('id', id);
 		clone = this._track(clone, id);
 		this.elements.push(clone);
@@ -213,13 +213,13 @@ class AbstractCrop {
 		return matrix;
 	}
 
-	translateFromAToB(el, A, B) {
+	translateFromAToB(el, A, B, type='traceRegulateur') {
 		var oldPath = el.node.getAttribute('d');
 		var matrix = this.translateFromAToBMatrix(A, B);
 		var newPath = Snap.path.map(oldPath, matrix);
 		var clone = this.svg.path(newPath);
 		var id = this.id();
-		clone.addClass('traceRegulateur');
+		clone.addClass(type);
 		clone.data('id', id);
 		this._track(clone, id);
 		this.elements.push(clone);
