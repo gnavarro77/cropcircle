@@ -468,15 +468,3 @@ function clearTraceRegulateur(svg) {
 		el.remove();
 	});
 }
-
-/**
- */
-function _debug(obj) {
-	if (Array.isArray(obj)) {
-		obj.forEach(function(el) {
-			pin({ x: el.x, y: el.y });
-		});
-	} else {
-		pin({ x: obj.x, y: obj.y });
-	}
-}
