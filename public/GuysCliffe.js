@@ -68,7 +68,7 @@ class GuysCliffe extends AbstractCrop {
 		cercle = this.findElementById('id_20');
 		group.add(this.drawArcCircle(this.getCenter(cercle), this.getRadius(cercle), pt1, pt2));
 		cercle = this.findElementById('id_23');
-		group.add(this.drawArcCircle(this.getCenter(cercle), this.getRadius(cercle), pt2, pt3));
+		group.add(this.drawArcCircle(this.getCenter(cercle), this.getRadius(cercle), pt3, pt2));
 		cercle = this.findElementById('id_35');
 		group.add(this.drawArcCircle(this.getCenter(cercle), this.getRadius(cercle), pt4, pt3));
 		cercle = this.findElementById('id_17');
