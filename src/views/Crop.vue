@@ -52,7 +52,9 @@ const cropDefs = [
   { id: "fosbury", label: "Fosbury", myClass: "Fosbury" },
   { id: "guyscliffe", label: "Guy's Cliffe", myClass: "GuysCliffe" },
   { id: "liddingtoncastle", label: "Liddington Castle", myClass: "LiddingtonCastle" },
-  { id: "stonehenge", label: "Stonehenge", myClass: "Stonehenge" }
+  { id: "stonehenge", label: "Stonehenge", myClass: "Stonehenge" },
+  { id: "roundwayhill", label: "Roundway Hill", myClass: "RoundwayHill" }
+  
   
   
 ];
@@ -71,7 +73,7 @@ export default {
     onCropSelected: function(event) {
       var svg = Snap("#svg");
       var cropId = this.crop;
-      Vue.loadScript("/" + cropId + ".js").then(() => {
+      Vue.loadScript("/crops/" + cropId + ".js").then(() => {
         
         var obj = cropDefs.find(function(obj) {
           if (obj.id == cropId) {
@@ -101,7 +103,7 @@ export default {
   mounted() {
     var self = this;
     Vue.loadScript("/crop_commons.js").then(() => {
-      self.crop = "stonehenge";
+      self.crop = "roundwayhill";
       self.onCropSelected();
     });
   }
