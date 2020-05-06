@@ -341,7 +341,7 @@ class AbstractCrop {
 		var distrib = circularDistibution(radius, center, count, startAngle);
 		var lines = [];
 		distrib.forEach(function(pt) {
-			lines.push(self.drawLine(self.center, pt, type));
+			lines.push(self.drawLine(center, pt, type));
 		});
 		return lines;
 	}

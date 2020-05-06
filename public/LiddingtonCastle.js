@@ -5,7 +5,7 @@ class LiddingtonCastle extends AbstractCrop {
 
 	draw = function() {
 		var self = this;
-		this.pinable = true;
+		this.pinable = false;
 
 
 
