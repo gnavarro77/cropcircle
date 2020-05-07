@@ -10,7 +10,8 @@
     </div>
     <div class="row">
       <div class="column">
-        <svg id="svg" />
+        <svg id="svg" xmlns="http://www.w3.org/2000/svg">
+        </svg>
       </div>
     </div>
     <div class="row">
@@ -54,9 +55,9 @@ const cropDefs = [
   { id: "liddingtoncastle", label: "Liddington Castle", myClass: "LiddingtonCastle" },
   { id: "stonehenge", label: "Stonehenge", myClass: "Stonehenge" },
   { id: "roundwayhill", label: "Roundway Hill", myClass: "RoundwayHill" },
-  { id: "stoneylittleton", label: "Stoney Littleton", myClass: "StoneyLittleton" }
-  
-  
+  { id: "stoneylittleton", label: "Stoney Littleton", myClass: "StoneyLittleton" },
+  { id: "whitefieldhill", label: "Whitefield Hill", myClass: "WhitefieldHill" },
+  { id: "balsallcommon", label: "Balsall Common", myClass: "BalsallCommon" }
   
 ];
 
@@ -104,7 +105,7 @@ export default {
   mounted() {
     var self = this;
     Vue.loadScript("/crop_commons.js").then(() => {
-      self.crop = "stoneylittleton";
+      self.crop = "balsallcommon";
       self.onCropSelected();
     });
   }
