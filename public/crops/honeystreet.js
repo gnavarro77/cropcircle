@@ -84,7 +84,8 @@ class HoneyStreet extends AbstractCrop {
 		cercle = this.findElementById('id_54');
 		group.add(this.drawArcCircle(this.getCenter(cercle), this.getRadius(cercle), pt3, pt1));
 		self.mandalize(group, 5);
-
+		
+		
 		group = self.svg.group();
 		pt1 = this.intersectionByIds('id_36', 'id_55')[1];
 		this.pinPoint(pt1);
@@ -131,7 +132,7 @@ class HoneyStreet extends AbstractCrop {
 		}
 		self.mandalize(group, 5);
 
-		for (var i = 0; i < 3; i++) {
+		for (var i = 0; i < 4; i++) {
 			id1 = 'id_' + (27 - i);
 			id2 = 'id_' + (19 + i);
 			id3 = 'id_' + (37 + i);
