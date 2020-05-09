@@ -72,15 +72,18 @@ class HackpenHill extends AbstractCrop {
 		self.drawArcCircle(this.getCenter(cercle), this.getRadius(cercle), pts[0], pts[1])
 		self.makeAsTrace(self.findElementById('id_20'));
 		
-		pt1 = this.intersectionByIds('id_13', 'id_17')[0];
+		pt1 = this.intersectionByIds('id_13', 'id_19')[0];
 		self.pinPoint(pt1);
-		self.drawArcCircle(this.getCenter(cercle), this.getRadius(cercle), pt1, pts[0])
+		pt2 = this.intersectionByIds('id_13', 'id_17')[0];
+		self.pinPoint(pt2);
+		self.drawArcCircle(this.getCenter(cercle), this.getRadius(cercle), pt2, pt1);
 		
 		pt1 = this.intersectionByIds('id_13', 'id_19')[1];
 		self.pinPoint(pt1);
 		pt2 = this.intersectionByIds('id_13', 'id_15')[0];
 		self.pinPoint(pt2);
 		self.drawArcCircle(this.getCenter(cercle), this.getRadius(cercle), pt1, pt2)
+		
 		
 		pt3 = this.intersectionByIds('id_10', 'id_19')[0];
 		self.pinPoint(pt3);
@@ -89,9 +92,7 @@ class HackpenHill extends AbstractCrop {
 		pt1 = this.intersectionByIds('id_13', 'id_19')[0];
 		self.drawArcCircle(this.getCenter(cercle), this.getRadius(cercle), pt1, pt3);
 		
-		
 		// cercle du haut
-		
 		self.makeAsTrace(self.findElementById('id_15'));
 		self.makeAsTrace(self.findElementById('id_28'));
 		
@@ -149,6 +150,7 @@ class HackpenHill extends AbstractCrop {
 		self.drawArcCircle(this.getCenter(cercle), this.getRadius(cercle), pt2, pt1);
 		
 		// cercle bas gauche
+		
 		self.makeAsTrace(self.findElementById('id_17'));
 		self.makeAsTrace(self.findElementById('id_32'));
 		pt1 = this.intersectionByIds('id_13', 'id_24')[0];
@@ -193,5 +195,7 @@ class HackpenHill extends AbstractCrop {
 		cercle = self.findElementById('id_32');
 		self.drawArcCircle(this.getCenter(cercle), this.getRadius(cercle), pt2, pt6);
 		
+		
+		self.makeAsTrace(self.findElementById('id_17'));
 	}
 }
