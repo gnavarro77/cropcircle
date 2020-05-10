@@ -307,7 +307,11 @@ class AbstractCrop {
 			self.pinPoint(p);
 		});
 	}
-
+	
+	fid(id){
+		return this.findElementById(id);
+	}
+	
 	findElementById(id) {
 		var c = null;
 		this.elements.forEach(function(cercle) {
