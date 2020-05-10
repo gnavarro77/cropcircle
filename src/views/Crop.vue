@@ -65,7 +65,9 @@ const cropDefs = [
   { id: "milkhill", label: "Milk Hill", myClass: "MilkHill" },
   { id: "andechs", label: "Andechs", myClass: "Andechs" },
   { id: "mantondrove", label: "Manton Drove", myClass: "MantonDrove" },
-  { id: "wanboroughplain", label: "Wanborough Plain", myClass: "WanboroughPlain" }
+  { id: "wanboroughplain", label: "Wanborough Plain", myClass: "WanboroughPlain" },
+  { id: "etchilhampton", label: "Etchilhampton", myClass: "Etchilhampton" }
+  
   
   
 ];
@@ -114,7 +116,7 @@ export default {
   mounted() {
     var self = this;
     Vue.loadScript("/crop_commons.js").then(() => {
-      self.crop = "wanboroughplain";
+      self.crop = "etchilhampton";
       self.onCropSelected();
     });
   }

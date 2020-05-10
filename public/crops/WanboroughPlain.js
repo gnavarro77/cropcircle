@@ -80,21 +80,18 @@ class WanboroughPlain extends AbstractCrop {
 		pts.push(self.intersectionByIds('id_64', 'id_51')[0]);
 		pts.push(self.intersectionByIds('id_64', 'id_45')[0]);
 		pts.push(self.intersectionByIds('id_64', 'id_48')[0]);
-		group.add(self.drawLine(pts[1], pts[3],'trace'));
-		group.add(self.drawLine(pts[1], pts[4],'trace'));
-		group.add(self.drawLine(pts[1], pts[5],'trace'));
 		pts.push(self.intersectionByIds('id_62', 'id_54')[0]);
 		pts.push(self.intersectionByIds('id_62', 'id_48')[0]);
 		pts.push(self.intersectionByIds('id_62', 'id_39')[0]);
-		group.add(self.drawLine(pts[2], pts[6],'trace'));
-		group.add(self.drawLine(pts[2], pts[7],'trace'));
-		group.add(self.drawLine(pts[2], pts[8],'trace'));
+		group.add(self.drawLine(pts[1], pts[3],'trace'));
+		group.add(self.drawLine(pts[8], pts[4],'trace'));
+		group.add(self.drawLine(pts[7], pts[5],'trace'));
+		group.add(self.drawLine(pts[6], pts[2],'trace'));
 		pts.push(self.intersectionByIds('id_4', 'id_36')[0]);
 		pts.push(self.intersectionByIds('id_4', 'id_48')[0]);
 		group.add(self.drawLine(pts[9], pts[10],'trace'));
 		
 		// --------------------
-		/*
 		pts = [];
 		pts.push(self.intersectionByIds('id_62', 'id_21')[0]);
 		pts.push(self.intersectionByIds('id_64', 'id_21')[0]);
@@ -141,6 +138,5 @@ class WanboroughPlain extends AbstractCrop {
 		self.pinPoints(pts);
 		
 		self.makeAsTrace(self.fid('id_20'));
-		*/
 	}
 }
