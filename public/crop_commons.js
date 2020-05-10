@@ -26,6 +26,11 @@ function midPoint(ptA, ptB) {
 	return { x: (ptA.x + ptB.x) / 2, y: (ptA.y + ptB.y) / 2 };
 }
 
+function isString(value) {
+	return typeof value === 'string' || value instanceof String;
+}
+
+
 /*
 **
  */
@@ -153,11 +158,11 @@ class AbstractCrop {
 	/**
 	 * 
 	 */
-	drawDiameter = function(pt, radius, angle, type='traceRegulateur') {
+	drawDiameter = function(pt, radius, angle, type = 'traceRegulateur') {
 		var cos = radius * Snap.cos(angle);
 		var sin = radius * Snap.sin(angle);
 		//var line = this.svg.line(pt.x + cos, pt.y + sin, pt.x - cos, pt.y - sin).addClass('traceRegulateur');
-		var line = this.drawLine({x:pt.x + cos,y:pt.y + sin}, {x:pt.x - cos,y:pt.y - sin});
+		var line = this.drawLine({ x: pt.x + cos, y: pt.y + sin }, { x: pt.x - cos, y: pt.y - sin });
 		line.addClass(type);
 		var id = this.id();
 		line.data('id', id);
@@ -192,7 +197,7 @@ class AbstractCrop {
 		return path;
 	}
 
-	rotate(el, pt, angle, type='traceRegulateur') {
+	rotate(el, pt, angle, type = 'traceRegulateur') {
 		var oldPath = el.node.getAttribute('d');
 		var matrix = new Snap.Matrix();
 		matrix.rotate(angle, pt.x, pt.y);
@@ -213,7 +218,7 @@ class AbstractCrop {
 		return matrix;
 	}
 
-	translateFromAToB(el, A, B, type='traceRegulateur') {
+	translateFromAToB(el, A, B, type = 'traceRegulateur') {
 		var oldPath = el.node.getAttribute('d');
 		var matrix = this.translateFromAToBMatrix(A, B);
 		var newPath = Snap.path.map(oldPath, matrix);
@@ -336,7 +341,7 @@ class AbstractCrop {
 		return Snap.path.intersection(c1, c2);
 	}
 
-	drawCircularDistribution(center, radius, count, startAngle = 0, type='traceRegulateur') {
+	drawCircularDistribution(center, radius, count, startAngle = 0, type = 'traceRegulateur') {
 		var self = this;
 		var distrib = circularDistibution(radius, center, count, startAngle);
 		var lines = [];
@@ -347,6 +352,9 @@ class AbstractCrop {
 	}
 
 	makeAsTrace(el) {
+		if (isString(el)){
+			el = this.findElementById(el);
+		} 
 		el.removeClass('traceRegulateur');
 		el.addClass('trace');
 	}
