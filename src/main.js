@@ -11,7 +11,6 @@ import Snap from 'imports-loader?this=>window,fix=>module.exports=0!snapsvg/dist
 require('../public/crop_commons.js');
 require('../public/parser-transform.js');
 
-
 window.Vue = Vue;
 window.Snap = Snap;
 

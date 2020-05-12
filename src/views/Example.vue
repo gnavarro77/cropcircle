@@ -2,67 +2,52 @@
   <div class="container">
     <div class="row">
       <div class="column">
-        <svg id="svg"  width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-        
-<defs>
-      <pattern id="smallGrid" width="10" height="10" patternUnits="userSpaceOnUse">
-        <path d="M 10 0 L 0 0 0 10" fill="none" stroke="gray" stroke-width="0.5"/>
-      </pattern>
-      <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse">
-        <rect width="100" height="100" fill="url(#smallGrid)"/>
-        <path d="M 100 0 L 0 0 0 100" fill="none" stroke="gray" stroke-width="1"/>
-      </pattern>
-    </defs>
-    <rect width="100%" height="100%" fill="url(#grid)" />        
-                
+        <svg id="svg" ref="mySvg" width="500px" height="500px">
+        	<!-- <rect x="0" y="0" width="100" height="100" class="trace"/> -->
+        	
         </svg>
-      </div>
-    </div>
-    <div class="row">
-      <div class="column">
-        {{path}}
-      </div>
-      <div class="column">
-        {{path2}}
+        </svg>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+
+import {CropWrapper} from '../../public/CropWrapper.js';
+
 export default {
   name: "Example",
   data() {
     return {
-      path: null,
-      path2 : null
+      path: null
     };
   },
+  created(){
+  },
   mounted(){
-	var self = this;
-	var s = Snap("#svg");
-    var w = s.paper.node.width.baseVal.value;
-    var h = s.paper.node.height.baseVal.value;
-    for (var y = 10; y < h; y +=10){
-    	s.line(0, y, w, y).addClass('traceRegulateur');
-	}
-	for (var x = 10; x < w; x += 10) {
-		s.line(x, 0, x, h).addClass('traceRegulateur');
-	}
-	
-	var line = s.path('M10,10 L100,100').addClass('trace');
-	this.path = line.node.getAttribute('d');
-	
-	var clone = line.clone();
-	
-	var matrix = new Snap.Matrix();
-	matrix.translate(100,50);
-	
-	clone.transform('r90, 50, 100');
-	
-	clone = normalizeCoordinates(s, clone);
-	this.path2 = clone.node.getAttribute('d');
-	
+  var mySvg = this.$refs.mySvg;
+  	var tux = Snap.load("/svg/etchilhampton.svg", 
+  		function ( loadedFragment ) {
+  			var s = Snap();
+  			s.add(loadedFragment);
+  			var svgNode = s.select('svg');
+  			var width = svgNode.attr('width');
+  			var height = svgNode.attr('height');
+  			Snap(mySvg).add(svgNode);
+  			
+  			var x = width / 2;
+  			var y = height / 2;
+  			//svgNode.addClass('trace');
+  			svgNode.transform('T -' + width + ',' + height/2);
+  			svgNode.animate({ transform: 'T' + x + ',' + y }, 1000);
+			//mySvg.add( loadedFragment );
+			//loadedFragment.transform('t 100, 100');
+			//fond = mySvg.select('#fond');
+			//motif = mySvg.select('#motif').select('#pattern');
+			//motif.animate({ transform: 't100,100' }, 2000);
+			//console.log('Yep!');
+	} );
   }
 };
 </script>

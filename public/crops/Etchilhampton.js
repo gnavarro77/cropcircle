@@ -84,9 +84,9 @@ class Etchilhampton extends AbstractCrop {
 		group.add(self.drawArcCircle(this.getCenter(cercle), this.getRadius(cercle), pts[2], pts[0]));
 		// ---
 		pts = [];
-		pts.push(self.intersectionByIds('id_85', 'id_100')[0]);
-		pts.push(self.intersectionByIds('id_85', 'id_36')[0]);
-		cercle = self.fid('id_85');
+		pts.push(self.intersectionByIds('id_86', 'id_100')[0]);
+		pts.push(self.intersectionByIds('id_86', 'id_36')[0]);
+		cercle = self.fid('id_86');
 		group.add(self.drawArcCircle(this.getCenter(cercle), this.getRadius(cercle), pts[1], pts[0]));
 		pts.push(self.intersectionByIds('id_36', 'id_57')[0]);
 		cercle = self.fid('id_36');

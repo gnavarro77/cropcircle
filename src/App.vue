@@ -5,8 +5,6 @@
       <router-link to="/bezier">Bezier Curve</router-link>|
       <router-link to="/">Example</router-link>
     </div>
-
-    
       <router-view />
   </div>
 </template>
