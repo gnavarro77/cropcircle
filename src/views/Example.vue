@@ -32,15 +32,20 @@ export default {
   			var s = Snap();
   			s.add(loadedFragment);
   			var svgNode = s.select('svg');
-  			var width = svgNode.attr('width');
-  			var height = svgNode.attr('height');
   			Snap(mySvg).add(svgNode);
   			
-  			var x = width / 2;
-  			var y = height / 2;
-  			//svgNode.addClass('trace');
-  			svgNode.transform('T -' + width + ',' + height/2);
-  			svgNode.animate({ transform: 'T' + x + ',' + y }, 1000);
+  			svgNode.transform('T 0 0');
+  			var bbox = svgNode.getBBox();
+  			var x = bbox.x + bbox.width / 2;
+  			var y = bbox.y + bbox.height / 2;
+  			
+  			
+  			//svgNode.animate({ transform: 't' + x + ' ' + y }, 2000, mina.ease, function(){
+  				//svgNode.animate({transform : 'R 180 ' + x + ' ' + y}, 1000,mina.ease);
+  			//});
+  			
+  			
+  			
 			//mySvg.add( loadedFragment );
 			//loadedFragment.transform('t 100, 100');
 			//fond = mySvg.select('#fond');
