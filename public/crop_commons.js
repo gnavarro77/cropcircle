@@ -314,11 +314,13 @@ class AbstractCrop {
 	
 	findElementById(id) {
 		var c = null;
+		id = Number.isInteger(id)?'id_'+id:id;
 		this.elements.forEach(function(cercle) {
 			if (cercle.data('id') == id) {
 				c = cercle;
 			}
 		})
+		if (c == null) throw new Error(id + ' not found');
 		return c;
 	}
 
@@ -334,14 +336,10 @@ class AbstractCrop {
 	}
 
 	intersectionByIds(id1, id2) {
+		id1 = Number.isInteger(id1)?'id_'+id1:id1;
+		id2 = Number.isInteger(id2)?'id_'+id2:id2;
 		var c1 = this.findElementById(id1);
-		if (c1 == null) {
-			throw new Error('id : ' + id1 + ' not found');
-		}
 		var c2 = this.findElementById(id2);
-		if (c2 == null) {
-			throw new Error('id : ' + id2 + ' not found');
-		}
 		return Snap.path.intersection(c1, c2);
 	}
 
