@@ -245,7 +245,7 @@ class AbstractCrop {
 		return lines;
 	}
 
-	mandalize(el, count) {
+	mandalize(el, count, pt = this.center) {
 		var step = 360 / count;
 		var angle = null;
 		var clone = null;
@@ -253,7 +253,7 @@ class AbstractCrop {
 		for (var i = 1; i < count; i++) {
 			angle = i * step;
 			clone = el.clone();
-			clone.transform('r' + angle + ',' + this.center.x + ',' + this.center.y);
+			clone.transform('r' + angle + ',' + pt.x + ',' + pt.y);
 			clones.push(clone);
 		}
 		return clones;
