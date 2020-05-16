@@ -77,7 +77,7 @@ class AbstractCrop {
 		var textBox;
 		function hover(event) {
 			var bbox = event.target.getBBox();
-			textBox = self.svg.text(bbox.x, bbox.y, id).addClass('tooltip');
+			textBox = self.svg.text(bbox.x + bbox.width/2, bbox.y + bbox.height/2, id).addClass('tooltip');
 		}
 		function hout() {
 			textBox.remove();
