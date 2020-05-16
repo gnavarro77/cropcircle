@@ -77,10 +77,10 @@ class SparticlesWood extends AbstractCrop {
 		pts.push(self.intersectionByIds(101, 98)[0]);
 		var line = self.drawLine(pts[0], pts[1],'trace');
 		group.add(line);
-		group.add(self.rotate(line,pts[0],-90,'trace'));
+		//group.add(self.rotate(line,pts[0],-90,'trace'));
 		group.add(self.rotate(line,pts[1],90,'trace'));
 		a = getDistanceBetweenPoints(pts[0],pts[1]);
-		group.add(self.translateFromAToB(line, pts[0],{x:pts[0].x + a, y:pts[0].y},'trace'));
+		//group.add(self.translateFromAToB(line, pts[0],{x:pts[0].x + a, y:pts[0].y},'trace'));
 		
 		function _line(start){
 			a = getDistanceBetweenPoints(self.intersectionByIds(101, 102)[0],start);
