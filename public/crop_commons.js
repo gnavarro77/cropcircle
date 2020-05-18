@@ -11,6 +11,10 @@ Snap.plugin(function(Snap, Element, Paper, global) {
 
 });
 
+function roundToTwo(num) {    
+    return +(Math.round(num + "e+2")  + "e-2");
+}
+
 function polarToCartesian(centerX, centerY, radius, angle) {
 	return {
 		x: centerX + (radius * Snap.cos(angle)),
@@ -440,8 +444,8 @@ function getDistanceBetweenPoints(pt1, pt2) {
  */
 function circularDistibution(radius, center, count, startAngle = 0) {
 	var points = [];
-	var step = 360 / count;
-	var ang = startAngle;
+	var step = roundToTwo(360 / count);
+	var ang = roundToTwo(startAngle);
 	for (var i = 0; i < count; i++) {
 		ang += (i == 0) ? 0 : step;
 		var p = {
