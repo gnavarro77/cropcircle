@@ -11,6 +11,8 @@ Snap.plugin(function(Snap, Element, Paper, global) {
 
 });
 
+
+
 function roundToTwo(num) {    
     return +(Math.round(num + "e+2")  + "e-2");
 }
@@ -49,6 +51,17 @@ function describeArc(x, y, radius, startAngle, endAngle) {
 	return d;
 }
 
+/**
+ * 
+ * @param pt1
+ * @param pt2
+ * @returns
+ */
+function linePath(pt1, pt2){
+	var expr = "M" + pt1.x + "," + pt1.y;
+	expr += " L" + pt2.x + ", " + pt2.y;
+	return expr;
+}
 
 /**
  * 
@@ -106,6 +119,33 @@ class AbstractCrop {
 		this._track(line, id);
 		this.elements.push(line);
 		return line;
+	}
+	
+	perpendicular = function(pt1, pt2) {
+		var self = this;
+//		this.pinPoint(pt1);
+//		this.pinPoint(pt2);
+		var pt3 = {x: pt1.x - (pt2.x - pt1.x), y:pt1.y + Math.abs(pt2.y - pt1.y)};
+		var line = this.svg.path(linePath(pt3,pt2));
+		line.addClass('trace');
+		var c = this.svg.circlePath(pt1.x, pt1.y, 20);
+		c.addClass('trace');
+		var pts = Snap.path.intersection(line, c);
+//		this.pinPoints(pts);
+		var cercles = [];
+		pts.forEach(function(pt){
+			cercles.push(self.svg.circlePath(pt.x, pt.y, 50));
+		});
+		pts = Snap.path.intersection(cercles[0], cercles[1]);
+//		this.pinPoints(pts);
+		var l = self.drawLine(pts[0],pts[1]);
+		line.remove();
+		c.remove();
+		cercles[0].remove();
+		cercles[1].remove();
+		
+		var le = new LineEquation(pts[0],pts[1]);
+		return {line:l,le:le};
 	}
 
 	drawTriangle = function(pts, type = 'traceRegulateur') {
