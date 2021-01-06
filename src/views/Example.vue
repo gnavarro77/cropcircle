@@ -2,10 +2,10 @@
   <div class="container">
     <div class="row">
       <div class="column">
-        <svg id="svg" ref="mySvg" width="500px" height="500px">
-        	<!-- <rect x="0" y="0" width="100" height="100" class="trace"/> -->
-        	
-        </svg>
+        <svg id="svg" ref="mySvg" xmlns="http://www.w3.org/2000/svg"
+        	viewBox="0 0 500 500" 
+        	preserveAspectRatio="xMidYMid meet"
+        	width="500" height="500">
         </svg>
       </div>
     </div>
@@ -15,6 +15,7 @@
 <script>
 
 import {CropWrapper} from '../../public/CropWrapper.js';
+import {TweenMax, TimelineMax}  from 'gsap';
 
 export default {
   name: "Example",
@@ -27,31 +28,28 @@ export default {
   },
   mounted(){
   var mySvg = this.$refs.mySvg;
-  	var tux = Snap.load("/svg/etchilhampton.svg", 
+  	var tux = Snap.load("/svg/flamand_rose.svg", 
   		function ( loadedFragment ) {
-  			var s = Snap();
-  			s.add(loadedFragment);
-  			var svgNode = s.select('svg');
-  			Snap(mySvg).add(svgNode);
+  			var paths =  loadedFragment.node.getElementsByTagName('path');
   			
-  			svgNode.transform('T 0 0');
-  			var bbox = svgNode.getBBox();
-  			var x = bbox.x + bbox.width / 2;
-  			var y = bbox.y + bbox.height / 2;
+  			if (paths.length > 1){
+  				var tl = new TimelineMax();
+  				var length = paths.length;
+  				for (var i=0; i < length ; i++){
+  					var path = paths[0];
+  					mySvg.appendChild(path);
+  					var l = path.getTotalLength();
+					TweenMax.set(path, {strokeDasharray:l});
+  					tl.add( TweenMax.fromTo(path, l * 0.005, {strokeDashoffset:l}, {strokeDashoffset:0}) );
+  				}
+  			} else {
+  				var path = paths[0];
+	  			mySvg.appendChild(path);
+				var l = path.getTotalLength();
+				TweenMax.set(path, {strokeDasharray:l});
+				TweenMax.fromTo(path, l * 0.01, {strokeDashoffset:l}, {strokeDashoffset:0});
+  			}
   			
-  			
-  			//svgNode.animate({ transform: 't' + x + ' ' + y }, 2000, mina.ease, function(){
-  				//svgNode.animate({transform : 'R 180 ' + x + ' ' + y}, 1000,mina.ease);
-  			//});
-  			
-  			
-  			
-			//mySvg.add( loadedFragment );
-			//loadedFragment.transform('t 100, 100');
-			//fond = mySvg.select('#fond');
-			//motif = mySvg.select('#motif').select('#pattern');
-			//motif.animate({ transform: 't100,100' }, 2000);
-			//console.log('Yep!');
 	} );
   }
 };

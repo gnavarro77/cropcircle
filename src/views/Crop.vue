@@ -101,7 +101,9 @@ const cropDefs = [
 
 export default {
   name: "Crop",
-  created: function() {},
+  created: function() {
+  	console.debug('Crop Vue created!');
+  },
   data() {
     return {
       crops: cropDefs,
@@ -111,20 +113,24 @@ export default {
   },
   methods: {
     onCropSelected: function(event) {
-      var svg = Snap("#svg");
-      var cropId = this.crop;
-      Vue.loadScript("/crops/" + cropId + ".js").then(() => {
-        
-        var obj = cropDefs.find(function(obj) {
-          if (obj.id == cropId) {
-            return obj;
-          }
-        });
-        svg.clear();
-        var myClass = obj.myClass;
-        var instance = eval(`new ${myClass}(svg)`);
-        instance.draw();
-      });
+    	console.debug('Rendering selected crop circle %s',this.crop);
+    	var svg = Snap("#svg");
+    	svg.clear();
+    	if (this.crop){
+	      var cropId = this.crop;
+	      Vue.loadScript("/crops/" + cropId + ".js").then(() => {
+	        
+	        var obj = cropDefs.find(function(obj) {
+	          if (obj.id == cropId) {
+	            return obj;
+	          }
+	        });
+	        
+	        var myClass = obj.myClass;
+	        var instance = eval(`new ${myClass}(svg)`);
+	        instance.draw();
+	      });
+    	}
     },
     onDisplayTraceRegulateurValueChanged: function(event) {
       var display = this.displayTraceRegulateur;
@@ -143,7 +149,7 @@ export default {
   mounted() {
     var self = this;
     Vue.loadScript("/crop_commons.js").then(() => {
-      self.crop = "silburyhill";
+      
       self.onCropSelected();
     });
   }

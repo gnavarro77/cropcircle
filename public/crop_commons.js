@@ -225,7 +225,6 @@ class AbstractCrop {
 			pt1.y,
 			center.x,
 			center.y
-
 		);
 		var endAngle = Snap.angle(
 			center.x + radius,
@@ -352,13 +351,17 @@ class AbstractCrop {
 		});
 	}
 	
+	_resolveId(id) {
+		return Number.isInteger(id)?'id_'+id:id;
+	}
+	
 	fid(id){
 		return this.findElementById(id);
 	}
 	
 	findElementById(id) {
 		var c = null;
-		id = Number.isInteger(id)?'id_'+id:id;
+		id = this._resolveId(id)
 		this.elements.forEach(function(cercle) {
 			if (cercle.data('id') == id) {
 				c = cercle;
@@ -380,12 +383,12 @@ class AbstractCrop {
 	}
 
 	intersectionByIds(id1, id2) {
-		id1 = Number.isInteger(id1)?'id_'+id1:id1;
-		id2 = Number.isInteger(id2)?'id_'+id2:id2;
-		var c1 = this.findElementById(id1);
-		var c2 = this.findElementById(id2);
+		var c1 = this.fid(id1);
+		var c2 = this.fid(id2);
 		return Snap.path.intersection(c1, c2);
 	}
+	
+	
 
 	drawCircularDistribution(center, radius, count, startAngle = 0, type = 'traceRegulateur') {
 		var self = this;
@@ -461,6 +464,7 @@ class LineEquation {
 	}
 
 }
+
 
 /**
  */

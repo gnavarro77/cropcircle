@@ -5,7 +5,8 @@ class Boxley extends AbstractCrop {
 	}
 
 	draw = function () {
-		this.pinable = false;
+		var self = this;
+		this.pinable = true;
 
 		var radius = [48, 180];
 
@@ -58,52 +59,48 @@ class Boxley extends AbstractCrop {
 
 
 		//this.pinPoints(allCenters);
-
 		var rayons = [8, 20, 24, 28, 32];
-		var c1 = this.findCircleById('id_34');
-		var c2 = this.findCircleById('id_35');
-		var intersects = Snap.path.intersection(c1, c2);
-		this.drawCenteredCercles(intersects[0], rayons);
-
-		c1 = this.findCircleById('id_35');
-		c2 = this.findCircleById('id_36');
-		intersects = Snap.path.intersection(c1, c2);
-		this.drawCenteredCercles(intersects[0], rayons);
-
-		c1 = this.findCircleById('id_36');
-		c2 = this.findCircleById('id_34');
-		intersects = Snap.path.intersection(c1, c2);
-		this.drawCenteredCercles(intersects[0], rayons);
-
+		function __drawCircles(cid1,cid2){
+			var intersects = Snap.path.intersection(self.fid(cid1), self.fid(cid2));
+			self.drawCenteredCercles(intersects[0], rayons);
+		}
+		__drawCircles(44,42);
+		__drawCircles(44,43);
+		__drawCircles(42,43);
 
 		// petale superieur
-		var pt, pt1, pt2, pt3, pt4, pt5, pt6, c, arc, arc1, arc2, arc3, arc4, arc5, intersects = null;
-
-		pt1 = this.intersectionByIds('id_22', 'id_24')[1];
-		pt2 = this.intersectionByIds('id_21', 'id_24')[1];
-		pt3 = this.intersectionByIds('id_22', 'id_21')[1];
-
-		c = this.findCircleById('id_24');
-		arc1 = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt2, pt1);
-		c = this.findCircleById('id_22');
-		arc2 = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt3, pt1);
-		c = this.findCircleById('id_21');
-		arc3 = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt2, pt3);
-		var group = this.svg.group(arc1, arc2, arc3);
-		group.clone().transform('r120,' + this.center.x + ',' + this.center.y);
-		group.clone().transform('r240,' + this.center.x + ',' + this.center.y);
-
+		var group, pt, pt1, pt2, pt3, pt4, pt5, pt6, c, arc, arc1, arc2, arc3, arc4, arc5, intersects = null;
+		
+		pt1 = this.intersectionByIds(32,29)[1];
+		pt2 = this.intersectionByIds(30,29)[1];
+		pt3 = this.intersectionByIds(32,30)[1];
+		c = this.fid(29);
+		arc1 = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt1, pt2);
+		c = this.fid(30);
+		arc2 = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt2, pt3);
+		c = this.fid(32);
+		arc3 = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt1, pt3);
+		group = this.svg.group(arc1, arc2, arc3);
+		
 		// ****************
-		group = this.svg.group();
-		intersects = this.intersectionByIds('id_44', 'id_13');
-		pt1 = intersects[0];
-		pt2 = intersects[1];
+		pt1 = this.intersectionByIds(50,44)[0];
 		this.pinPoint(pt1);
+		pt2 = this.intersectionByIds(42,50)[1];
 		this.pinPoint(pt2);
-		c = this.findCircleById('id_44');
+		c = this.fid(50);
 		arc = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt1, pt2);
 		group.add(arc);
-
+		
+		
+		this.mandalize(group, 3, this.center);
+//		pt1 = intersects[0];
+//		pt2 = intersects[1];
+//		this.pinPoint(pt1);
+//		this.pinPoint(pt2);
+//		c = this.fid('id_44');
+//		arc = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt1, pt2);
+//		group.add(arc);
+		/*
 		intersects = this.intersectionByIds('id_13','id_4');
 		pt3 = intersects[0];
 		this.pinPoint(pt3);
@@ -111,29 +108,29 @@ class Boxley extends AbstractCrop {
 		pt4 = intersects[1];
 		this.pinPoint(pt4);
 
-		c = this.findCircleById('id_13');
+		c = this.fid('id_13');
 		arc1 = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt1, pt3);
 		group.add(arc1);
 
-		c = this.findCircleById('id_4');
+		c = this.fid('id_4');
 		arc2 = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt4, pt3);
 		group.add(arc2);
 
 		intersects = this.intersectionByIds('id_10','id_3');
 		pt5 = intersects[1];
 		this.pinPoint(pt5);
-		c = this.findCircleById('id_10');
+		c = this.fid('id_10');
 		arc3 = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt5, pt4);
 		group.add(arc3);
 
 		intersects = this.intersectionByIds('id_3','id_13');
 		pt6 = intersects[1];
 		this.pinPoint(pt6);
-		c = this.findCircleById('id_3');
+		c = this.fid('id_3');
 		arc4 = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt6, pt5);
 		group.add(arc4);
 
-		c = this.findCircleById('id_13');
+		c = this.fid('id_13');
 		arc5 = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt6, pt2);
 		group.add(arc5);
 
@@ -147,42 +144,42 @@ class Boxley extends AbstractCrop {
 		pt1 = intersects[1];
 		pt2 = intersects[0];
 		this.pinPoint(pt2);
-		c = this.findCircleById('id_43');
+		c = this.fid('id_43');
 		arc = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt2, pt1);
 		group.add(arc);
 
 		intersects = this.intersectionByIds('id_4', 'id_16');
 		pt3 = intersects[1];
 		this.pinPoint(pt3);
-		c = this.findCircleById('id_16');
+		c = this.fid('id_16');
 		arc = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt2, pt3);
 		group.add(arc);
 
 		intersects = this.intersectionByIds('id_4', 'id_19');
 		pt4 = intersects[0];
 		this.pinPoint(pt4);
-		c = this.findCircleById('id_4');
+		c = this.fid('id_4');
 		arc = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt3, pt4);
 		group.add(arc);
 
 		intersects = this.intersectionByIds('id_32', 'id_19');
 		pt1 = intersects[1];
 		this.pinPoint(pt1);
-		c = this.findCircleById('id_19');
+		c = this.fid('id_19');
 		arc = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt1, pt4);
 		group.add(arc);
 
 		intersects = this.intersectionByIds('id_32', 'id_20');
 		pt2 = intersects[0];
 		this.pinPoint(pt2);
-		c = this.findCircleById('id_32');
+		c = this.fid('id_32');
 		arc = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt1, pt2);
 		group.add(arc);
 
 		intersects = this.intersectionByIds('id_4', 'id_20');
 		pt3 = intersects[0];
 		this.pinPoint(pt3);
-		c = this.findCircleById('id_20');
+		c = this.fid('id_20');
 		arc = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt3, pt2);
 		group.add(arc);
 		
@@ -190,7 +187,7 @@ class Boxley extends AbstractCrop {
 		intersects = this.intersectionByIds('id_4', 'id_17');
 		pt4 = intersects[0];
 		this.pinPoint(pt4);
-		c = this.findCircleById('id_4');
+		c = this.fid('id_4');
 		arc = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt3, pt4);
 		group.add(arc);
 		
@@ -198,7 +195,7 @@ class Boxley extends AbstractCrop {
 		intersects = this.intersectionByIds('id_48', 'id_17');
 		pt5 = intersects[0];
 		this.pinPoint(pt5);
-		c = this.findCircleById('id_17');
+		c = this.fid('id_17');
 		arc = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt4, pt5);
 		group.add(arc);
 
@@ -206,22 +203,22 @@ class Boxley extends AbstractCrop {
 		group.clone().transform('r240,' + this.center.x + ',' + this.center.y);
 		
 
-		
+		/*
 		group = this.svg.group();
 		intersects = this.intersectionByIds('id_27', 'id_40');
 		var pt1 = intersects[1]
 		var pt2 = this.intersectionByIds('id_28', 'id_40')[0];
 		this.pinPoint(pt1);
 		this.pinPoint(pt2);
-		c = this.findCircleById('id_40');
+		c = this.fid('id_40');
 		arc = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt2, pt1);
 		group.add(arc);
-		c = this.findCircleById('id_40');
+		c = this.fid('id_40');
 		
 		intersects = this.intersectionByIds('id_28', 'id_45');
 		pt3 = intersects[0];
 		this.pinPoint(pt3);
-		c = this.findCircleById('id_28');
+		c = this.fid('id_28');
 		arc = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt2, pt3);
 		group.add(arc);
 		group.clone().transform('r120,' + this.center.x + ',' + this.center.y);
@@ -231,37 +228,37 @@ class Boxley extends AbstractCrop {
 		group = this.svg.group();
 		pt1 = this.intersectionByIds('id_35', 'id_42')[0];
 		pt2 = this.intersectionByIds('id_34', 'id_42')[1];
-		c = this.findCircleById('id_42');
+		c = this.fid('id_42');
 		arc = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt2, pt1);
 		group.add(arc);
 
 		pt = this.intersectionByIds('id_35', 'id_47')[0];
-		c = this.findCircleById('id_35');
+		c = this.fid('id_35');
 		arc = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt1, pt);
 		group.add(arc);
 
 		pt1 = this.intersectionByIds('id_35', 'id_41')[0];
 		pt2 = this.intersectionByIds('id_34', 'id_41')[1];
-		c = this.findCircleById('id_41');
+		c = this.fid('id_41');
 		arc = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt2, pt1);
 		group.add(arc);
 
 		pt = this.intersectionByIds('id_35', 'id_40')[0];
-		c = this.findCircleById('id_35');
+		c = this.fid('id_35');
 		arc = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt1, pt);
 		group.add(arc);
 
 		pt4 = this.intersectionByIds('id_34', 'id_40')[1];
-		c = this.findCircleById('id_40');
+		c = this.fid('id_40');
 		arc = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt4, pt);
 		group.add(arc);
 
-		c = this.findCircleById('id_34');
+		c = this.fid('id_34');
 		arc = this.drawArcCircle(this.getCenter(c), this.getRadius(c), pt2, pt4);
 		group.add(arc);
 
 		group.clone().transform('r120,' + this.center.x + ',' + this.center.y);
 		group.clone().transform('r240,' + this.center.x + ',' + this.center.y);
-		
+		*/
 	}
 }

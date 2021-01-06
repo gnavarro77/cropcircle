@@ -19,11 +19,9 @@ class CleyHill extends AbstractCrop {
 
 		self.drawLines(circularDistibution(getDistanceBetweenPoints(self.center, pt), self.center, 6, 0));
 
-		self.drawCircle(self.center, 175);
-		self.drawCircle(self.center, 185);
-		self.drawCircle(self.center, 170);
+		self.drawCenteredCercles(self.center, [170,175,185]);
 
-		function drawHexa(id, extra = true, type = 'traceRegulateur') {
+		function __drawHexa(id, extra = true, type = 'traceRegulateur') {
 			var pt = self.intersectionByIds('id_1', id)[0];
 			var line = self.translateFromAToB(self.findElementById('id_4'), self.center, pt);
 			pt = self.intersectionByIds('id_2', line.data('id'))[0];
@@ -32,17 +30,17 @@ class CleyHill extends AbstractCrop {
 			self.drawLines(pts, type);
 			if (extra) {
 				pts.forEach(function(pt) {
-					self.drawCircle(pt, 5, 'trace');
+					self.drawCircle(pt, 5);
 				});
 			}
 			line.remove();
 		}
 
 
-		drawHexa('id_34', true);
-		drawHexa('id_32', true, 'trace');
-		drawHexa('id_13', true, 'trace');
-		drawHexa('id_33', false, 'trace');
+		__drawHexa(34, true);
+		__drawHexa(32, true, 'trace');
+		__drawHexa(13, true, 'trace');
+		__drawHexa(33, false, 'trace');
 
 		function multiply(line) {
 			self.rotate(line, self.center, 60);
@@ -91,7 +89,6 @@ class CleyHill extends AbstractCrop {
 		pt = this.intersectionByIds('id_85', 'id_5')[0];
 		self.pinPoint(pt);
 		self.drawLine(self.center, pt, 'trace');
-		
 		
 		
 	}
